@@ -1,0 +1,3148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BatiPro by Hugues – Trouvez un artisan fiable près de chez vous</title>
+<meta name="description" content="Marketplace d'artisans du bâtiment. Électriciens, plombiers, maçons, peintres, menuisiers disponibles rapidement près de chez vous.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a3a6b;
+    --blue-mid: #2557a7;
+    --blue-light: #3b82f6;
+    --blue-pale: #eff6ff;
+    --orange: #f97316;
+    --orange-light: #fed7aa;
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --shadow: 0 4px 24px rgba(26,58,107,0.10);
+    --shadow-lg: 0 8px 40px rgba(26,58,107,0.15);
+    --transition: all 0.25s cubic-bezier(.4,0,.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--gray-800);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,h2,h3,h4,h5 { font-family: 'Sora', sans-serif; line-height: 1.2; }
+
+  /* ── NAVBAR ─────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 1000;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-100);
+    padding: 0 1.25rem;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px; gap: 1rem;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Sora', sans-serif; font-weight: 800;
+    font-size: 1.35rem; color: var(--blue); text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px; background: linear-gradient(135deg,var(--blue-light),var(--blue));
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.1rem;
+  }
+  .logo span { color: var(--orange); }
+  .nav-links { display: flex; align-items: center; gap: 0.25rem; }
+  .nav-links a {
+    color: var(--gray-600); text-decoration: none;
+    padding: 0.45rem 0.85rem; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 500;
+    transition: var(--transition);
+  }
+  .nav-links a:hover { background: var(--blue-pale); color: var(--blue-mid); }
+  .nav-cta {
+    background: var(--orange); color: #fff !important;
+    padding: 0.5rem 1.1rem !important; border-radius: 8px !important;
+    font-weight: 600 !important;
+  }
+  .nav-cta:hover { background: #ea6c0a !important; }
+  .nav-admin {
+    background: var(--blue); color: #fff !important;
+    padding: 0.45rem 0.9rem !important; border-radius: 8px !important;
+    font-size: 0.82rem !important; font-weight: 600 !important;
+  }
+  .nav-admin:hover { background: var(--blue-mid) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--gray-700); border-radius: 2px; transition: var(--transition); }
+
+  /* ── PAGES ──────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── HERO ───────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 60%, #1d4ed8 100%);
+    padding: 5rem 1.25rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  /* Slideshow hero background */
+  .hero-slides { position: absolute; inset: 0; z-index: 0; }
+  .hero-slide {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity 1.4s ease;
+  }
+  .hero-slide.active { opacity: 1; }
+  .hero-slide::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg,
+      rgba(15,40,80,0.82) 0%,
+      rgba(30,58,138,0.75) 50%,
+      rgba(15,40,80,0.88) 100%);
+  }
+  .hero-inner { position: relative; z-index: 2; }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 1;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  /* Section photos clients */
+  .photos-band {
+    display: flex; overflow: hidden; gap: 0; height: 220px;
+  }
+  .photos-band-item {
+    flex: 1; background-size: cover; background-position: center;
+    position: relative; transition: flex 0.4s ease;
+    min-width: 0;
+  }
+  .photos-band-item:hover { flex: 2.5; }
+  .photos-band-item::after {
+    content: attr(data-label);
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+    color: #fff; font-size: 0.8rem; font-weight: 600;
+    padding: 1.5rem 0.75rem 0.6rem;
+    opacity: 0; transition: opacity 0.3s;
+    text-align: center;
+  }
+  .photos-band-item:hover::after { opacity: 1; }
+  /* ── SPONSORS DÉFILÉ ────────────────────────────────────────────────────── */
+  .sponsors-section {
+    background: #f8fafc;
+    padding: 2.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .sponsors-label {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
+  .sponsors-track-wrapper {
+    overflow: hidden;
+    position: relative;
+  }
+  .sponsors-track-wrapper::before,
+  .sponsors-track-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+  }
+  .sponsors-track-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, #f8fafc, transparent);
+  }
+  .sponsors-track-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, #f8fafc, transparent);
+  }
+  .sponsors-track {
+    display: flex;
+    gap: 1.5rem;
+    animation: scrollSponsors 25s linear infinite;
+    width: max-content;
+  }
+  .sponsors-track:hover { animation-play-state: paused; }
+  @keyframes scrollSponsors {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .sponsor-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #fff;
+    border: 2px dashed var(--gray-200);
+    border-radius: 14px;
+    padding: 0.9rem 1.5rem;
+    min-width: 200px;
+    cursor: pointer;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+  .sponsor-card:hover {
+    border-color: var(--orange);
+    border-style: solid;
+    box-shadow: 0 4px 20px rgba(249,115,22,0.12);
+    transform: translateY(-2px);
+  }
+  .sponsor-card.real {
+    border-style: solid;
+    border-color: var(--gray-200);
+  }
+  .sponsor-logo {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .sponsor-info { min-width: 0; }
+  .sponsor-name {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--gray-800);
+    white-space: nowrap;
+  }
+  .sponsor-tag {
+    font-size: 0.72rem;
+    color: var(--gray-400);
+    margin-top: 1px;
+  }
+  .sponsor-card.placeholder .sponsor-name { color: var(--gray-400); }
+  .sponsor-card.placeholder .sponsor-logo { background: var(--gray-100); }
+  .btn-devenir-sponsor {
+    display: block;
+    margin: 1.5rem auto 0;
+    background: transparent;
+    border: 2px solid var(--orange);
+    color: var(--orange);
+    border-radius: 50px;
+    padding: 0.6rem 2rem;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: var(--transition);
+    width: fit-content;
+  }
+  .btn-devenir-sponsor:hover {
+    background: var(--orange);
+    color: #fff;
+  }
+
+  /* Section témoignages visuels */
+  .temoignages-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem; margin-top: 2rem;
+  }
+  .temoignage-card {
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: var(--transition);
+  }
+  .temoignage-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.14); }
+  .temoignage-photo {
+    height: 160px; background-size: cover; background-position: center top;
+    position: relative;
+  }
+  .temoignage-photo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3));
+  }
+  .temoignage-body { padding: 1.1rem; }
+  .temoignage-stars { color: #f59e0b; font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .temoignage-text { font-size: 0.85rem; color: var(--gray-600); font-style: italic; margin-bottom: 0.6rem; line-height: 1.6; }
+  .temoignage-name { font-size: 0.82rem; font-weight: 700; color: var(--gray-800); }
+  .temoignage-ville { font-size: 0.75rem; color: var(--gray-400); }
+  .hero-inner { max-width: 800px; margin: 0 auto; text-align: center; position: relative; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.25); border-radius: 50px;
+    color: #fff; font-size: 0.82rem; font-weight: 600;
+    padding: 6px 16px; margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem); color: #fff;
+    font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.5px;
+  }
+  .hero h1 em { color: var(--orange); font-style: normal; }
+  .hero p {
+    color: rgba(255,255,255,0.8); font-size: clamp(0.95rem,2.5vw,1.15rem);
+    margin-bottom: 2.5rem; max-width: 540px; margin-left: auto; margin-right: auto;
+  }
+  .search-box {
+    background: #fff; border-radius: var(--radius-lg);
+    padding: 8px; box-shadow: var(--shadow-lg);
+    display: flex; flex-wrap: wrap; gap: 8px;
+    max-width: 700px; margin: 0 auto;
+  }
+  .search-box select, .search-box input {
+    flex: 1; min-width: 150px; border: none; outline: none;
+    padding: 0.75rem 1rem; font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif; background: var(--gray-50);
+    border-radius: 10px; color: var(--gray-700);
+    appearance: none;
+  }
+  .search-box select { cursor: pointer; }
+  .btn-search {
+    background: var(--orange); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 0.75rem 1.5rem; font-size: 0.95rem;
+    font-weight: 600; cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: var(--transition); white-space: nowrap;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-search:hover { background: #ea6c0a; transform: translateY(-1px); }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat strong { display: block; color: #fff; font-size: 1.5rem; font-weight: 800; font-family: 'Sora', sans-serif; }
+  .hero-stat span { color: rgba(255,255,255,0.65); font-size: 0.82rem; }
+
+  /* ── SECTION LAYOUT ─────────────────────────── */
+  .section { padding: 4rem 1.25rem; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-header h2 { font-size: clamp(1.5rem,4vw,2.2rem); color: var(--blue); margin-bottom: 0.75rem; }
+  .section-header p { color: var(--gray-500); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+  .section-label {
+    display: inline-block; background: var(--blue-pale);
+    color: var(--blue-mid); font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 50px; margin-bottom: 0.75rem;
+  }
+
+  /* ── CATEGORIES ─────────────────────────────── */
+  .cats { background: var(--gray-50); }
+  .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 1rem; }
+  .cat-card {
+    background: #fff; border-radius: var(--radius);
+    padding: 1.5rem 1rem; text-align: center;
+    border: 2px solid transparent; cursor: pointer;
+    transition: var(--transition); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .cat-card:hover { border-color: var(--blue-light); transform: translateY(-4px); box-shadow: var(--shadow); }
+  .cat-icon {
+    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .cat-card h3 { font-size: 0.88rem; font-weight: 600; color: var(--gray-700); }
+  .cat-card small { color: var(--gray-400); font-size: 0.75rem; }
+
+  /* ── HOW IT WORKS ────────────────────────────── */
+  .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1.5rem; }
+  .step {
+    text-align: center; padding: 2rem 1.5rem;
+    background: var(--blue-pale); border-radius: var(--radius-lg);
+    position: relative;
+  }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--blue); color: #fff;
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .step h3 { color: var(--blue); font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step p { color: var(--gray-600); font-size: 0.88rem; }
+
+  /* ── TRUST SECTION ───────────────────────────── */
+  .trust { background: var(--blue); }
+  .trust-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 2rem; }
+  .trust-item { text-align: center; }
+  .trust-item .t-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  .trust-item h3 { color: #fff; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .trust-item p { color: rgba(255,255,255,0.65); font-size: 0.85rem; }
+
+  /* ── FEATURED ARTISANS ───────────────────────── */
+  .artisan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.5rem; }
+
+  /* ── ARTISAN CARD ────────────────────────────── */
+  .artisan-card {
+    background: #fff; border-radius: var(--radius-lg);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08); overflow: hidden;
+    transition: var(--transition); border: 1px solid var(--gray-100);
+    cursor: pointer;
+  }
+  .artisan-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .card-img {
+    position: relative; height: 180px;
+    background: linear-gradient(135deg, var(--blue-pale), var(--gray-100));
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .card-img .avatar-placeholder {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-light), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: #fff; font-family: 'Sora', sans-serif; font-weight: 700;
+  }
+  .badge-verified {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--success); color: #fff;
+    font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .badge-premium {
+    position: absolute; top: 12px; left: 12px;
+    background: linear-gradient(135deg,#f59e0b,var(--orange));
+    color: #fff; font-size: 0.72rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 50px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .badge-pending {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--warning); color: #fff;
+    font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
+  }
+  .card-body { padding: 1.25rem; }
+  .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
+  .card-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; color: var(--gray-800); }
+  .card-rating { display: flex; align-items: center; gap: 4px; }
+  .card-rating .stars { color: #f59e0b; font-size: 0.85rem; }
+  .card-rating span { font-size: 0.82rem; color: var(--gray-500); font-weight: 600; }
+  .card-job { color: var(--blue-mid); font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .card-zone { color: var(--gray-500); font-size: 0.82rem; display: flex; align-items: center; gap: 4px; margin-bottom: 1rem; }
+  .card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.55rem 1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; border: none; cursor: pointer; transition: var(--transition); font-family: 'DM Sans', sans-serif; text-decoration: none; }
+  .btn-wa { background: #25d366; color: #fff; flex: 1; justify-content: center; }
+  .btn-wa:hover { background: #1ebe5a; }
+  .btn-call { background: var(--blue-pale); color: var(--blue); flex: 1; justify-content: center; }
+  .btn-call:hover { background: var(--blue); color: #fff; }
+  .btn-profile { background: var(--gray-100); color: var(--gray-700); width: 100%; justify-content: center; margin-top: 0.4rem; }
+  .btn-profile:hover { background: var(--blue); color: #fff; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-mid); }
+  .btn-orange { background: var(--orange); color: #fff; }
+  .btn-orange:hover { background: #ea6c0a; }
+  .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+  .btn-outline:hover { background: var(--blue); color: #fff; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #059669; }
+  .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.78rem; }
+  .btn-lg { padding: 0.85rem 1.75rem; font-size: 1rem; border-radius: 10px; }
+
+  /* ── FILTER BAR ──────────────────────────────── */
+  .filter-bar {
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    padding: 1rem 1.25rem; position: sticky; top: 64px; z-index: 100;
+  }
+  .filter-inner { max-width: 1200px; margin: 0 auto; }
+  .filter-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+  .filter-row select, .filter-row input {
+    border: 1.5px solid var(--gray-200); border-radius: 8px;
+    padding: 0.5rem 0.85rem; font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif; outline: none;
+    transition: var(--transition); background: var(--gray-50);
+    color: var(--gray-700);
+  }
+  .filter-row select:focus, .filter-row input:focus { border-color: var(--blue-light); background: #fff; }
+  .results-count { color: var(--gray-500); font-size: 0.88rem; margin-left: auto; white-space: nowrap; }
+
+  /* ── RESULTS PAGE ────────────────────────────── */
+  .results-page { background: var(--gray-50); min-height: 100vh; }
+  .results-content { max-width: 1200px; margin: 0 auto; padding: 2rem 1.25rem; }
+
+  /* ── PROFILE PAGE ────────────────────────────── */
+  .profile-hero {
+    background: linear-gradient(135deg, var(--blue), var(--blue-mid));
+    padding: 3rem 1.25rem 2rem; text-align: center;
+  }
+  .profile-avatar {
+    width: 120px; height: 120px; border-radius: 50%;
+    border: 4px solid #fff; margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--blue-light), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: #fff; font-family: 'Sora', sans-serif; font-weight: 800;
+    overflow: hidden;
+  }
+  .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-name { font-size: 1.8rem; color: #fff; font-weight: 800; margin-bottom: 0.25rem; }
+  .profile-job { color: rgba(255,255,255,0.8); font-size: 1rem; margin-bottom: 0.75rem; }
+  .profile-badges { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+  .profile-content { max-width: 900px; margin: 0 auto; padding: 2rem 1.25rem; }
+  .profile-grid { display: grid; grid-template-columns: 1fr 320px; gap: 2rem; }
+  .profile-card {
+    background: #fff; border-radius: var(--radius-lg);
+    padding: 1.75rem; box-shadow: var(--shadow); margin-bottom: 1.5rem;
+    border: 1px solid var(--gray-100);
+  }
+  .profile-card h3 { font-size: 1rem; font-weight: 700; color: var(--blue); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--blue-pale); }
+  .info-row { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--gray-100); }
+  .info-row:last-child { border-bottom: none; }
+  .info-icon { width: 34px; height: 34px; border-radius: 8px; background: var(--blue-pale); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .info-label { font-size: 0.78rem; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .info-value { font-size: 0.92rem; color: var(--gray-700); font-weight: 500; }
+  .contact-sidebar { position: sticky; top: 100px; }
+  .review-item { padding: 1rem 0; border-bottom: 1px solid var(--gray-100); }
+  .review-item:last-child { border-bottom: none; }
+  .review-author { font-weight: 600; color: var(--gray-800); font-size: 0.88rem; }
+  .review-date { color: var(--gray-400); font-size: 0.78rem; }
+  .review-text { color: var(--gray-600); font-size: 0.88rem; margin-top: 0.4rem; }
+
+  /* ── FORM ────────────────────────────────────── */
+  .form-page { background: var(--gray-50); min-height: 100vh; padding: 3rem 1.25rem; }
+  .form-wrapper { max-width: 680px; margin: 0 auto; }
+  .form-card { background: #fff; border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: var(--shadow); border: 1px solid var(--gray-100); }
+  .form-header { text-align: center; margin-bottom: 2rem; }
+  .form-header h2 { color: var(--blue); font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .form-header p { color: var(--gray-500); font-size: 0.9rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-weight: 600; font-size: 0.88rem; color: var(--gray-700); margin-bottom: 0.45rem; }
+  .form-group label span { color: var(--danger); }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; border: 1.5px solid var(--gray-200); border-radius: 10px;
+    padding: 0.75rem 1rem; font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif; outline: none;
+    transition: var(--transition); background: var(--gray-50);
+    color: var(--gray-800);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue-light); background: #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .upload-area {
+    border: 2px dashed var(--gray-300); border-radius: 10px;
+    padding: 2rem; text-align: center; cursor: pointer;
+    transition: var(--transition); background: var(--gray-50);
+  }
+  .upload-area:hover { border-color: var(--blue-light); background: var(--blue-pale); }
+  .upload-area .u-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .upload-area p { font-size: 0.85rem; color: var(--gray-500); }
+  .upload-area input { display: none; }
+  .form-note { background: var(--blue-pale); border-radius: 10px; padding: 1rem; font-size: 0.85rem; color: var(--blue); margin-bottom: 1.5rem; display: flex; gap: 0.5rem; }
+  .success-msg {
+    background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px;
+    padding: 2rem; text-align: center;
+  }
+  .success-msg .s-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .success-msg h3 { color: var(--success); font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .success-msg p { color: var(--gray-600); font-size: 0.9rem; }
+
+  /* ── ADMIN ───────────────────────────────────── */
+  .admin-layout { display: flex; min-height: 100vh; }
+  .admin-sidebar {
+    width: 240px; background: var(--gray-900); padding: 1.5rem 0;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .admin-sidebar .s-logo { padding: 0 1.25rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 1rem; }
+  .admin-sidebar .s-logo span { font-family: 'Sora', sans-serif; font-weight: 800; color: #fff; font-size: 1rem; }
+  .admin-sidebar .s-logo small { display: block; color: var(--gray-400); font-size: 0.72rem; }
+  .s-nav a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0.65rem 1.25rem; color: var(--gray-400);
+    text-decoration: none; font-size: 0.88rem; font-weight: 500;
+    transition: var(--transition); border-left: 3px solid transparent;
+  }
+  .s-nav a:hover, .s-nav a.active { background: rgba(255,255,255,0.07); color: #fff; border-left-color: var(--orange); }
+  .s-nav .s-section { padding: 0.75rem 1.25rem 0.25rem; color: var(--gray-600); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .admin-main { flex: 1; background: var(--gray-50); overflow: auto; }
+  .admin-topbar {
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .admin-topbar h1 { font-size: 1.2rem; font-weight: 700; color: var(--gray-800); }
+  .admin-content { padding: 1.5rem; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .stat-card {
+    background: #fff; border-radius: var(--radius); padding: 1.25rem;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06); border: 1px solid var(--gray-100);
+  }
+  .stat-card .s-val { font-size: 2rem; font-weight: 800; font-family: 'Sora', sans-serif; color: var(--blue); }
+  .stat-card .s-lbl { font-size: 0.8rem; color: var(--gray-500); font-weight: 500; margin-top: 0.25rem; }
+  .stat-card .s-icon { font-size: 1.5rem; float: right; }
+  .table-card { background: #fff; border-radius: var(--radius); box-shadow: 0 1px 8px rgba(0,0,0,0.06); border: 1px solid var(--gray-100); overflow: hidden; }
+  .table-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .table-header h3 { font-size: 0.95rem; font-weight: 700; color: var(--gray-800); }
+  .table-header input { border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 0.45rem 0.85rem; font-size: 0.85rem; outline: none; font-family: 'DM Sans', sans-serif; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--gray-50); padding: 0.65rem 1rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); font-weight: 700; text-align: left; }
+  td { padding: 0.85rem 1rem; font-size: 0.88rem; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--gray-50); }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .status-pending { background: #fef3c7; color: #b45309; }
+  .status-verified { background: #d1fae5; color: #065f46; }
+  .status-rejected { background: #fee2e2; color: #991b1b; }
+  .status-premium { background: #fde68a; color: #92400e; }
+  .actions-cell { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+
+  /* ── CARTES VALIDATION ADMIN ─────────────────── */
+  .validation-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; padding: 1.25rem; }
+  .validation-card {
+    background: #fff; border-radius: 14px; border: 2px solid var(--gray-200);
+    overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    transition: var(--transition);
+  }
+  .validation-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+  .vc-header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+    padding: 1.1rem 1.25rem; display: flex; align-items: center; gap: 0.85rem;
+  }
+  .vc-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.4); }
+  .vc-name { color: #fff; font-weight: 700; font-size: 0.97rem; }
+  .vc-metier { color: rgba(255,255,255,0.75); font-size: 0.8rem; margin-top: 2px; }
+  .vc-body { padding: 1rem 1.25rem; }
+  .vc-info { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1rem; }
+  .vc-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--gray-600); }
+  .vc-row strong { color: var(--gray-800); min-width: 75px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.3px; }
+  .vc-date { font-size: 0.72rem; color: var(--gray-400); text-align: right; margin-bottom: 0.75rem; }
+  .vc-actions { display: flex; gap: 0.6rem; }
+  .vc-btn-accept { flex: 1; background: #10b981; color: #fff; border: none; border-radius: 10px; padding: 0.65rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .vc-btn-accept:hover { background: #059669; }
+  .vc-btn-reject { flex: 1; background: #fee2e2; color: #dc2626; border: none; border-radius: 10px; padding: 0.65rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .vc-btn-reject:hover { background: #fecaca; }
+  .vc-btn-detail { background: var(--gray-100); color: var(--gray-600); border: none; border-radius: 10px; padding: 0.65rem 0.85rem; font-size: 0.85rem; cursor: pointer; transition: var(--transition); }
+  .vc-btn-detail:hover { background: var(--gray-200); }
+  .empty-validation { text-align: center; padding: 3rem 1rem; color: var(--gray-400); }
+  .empty-validation .ev-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .detail-item { background: var(--gray-50); border-radius: 8px; padding: 0.75rem; }
+  .detail-item label { font-size: 0.72rem; text-transform: uppercase; color: var(--gray-400); font-weight: 700; letter-spacing: 0.5px; }
+  .detail-item p { font-size: 0.9rem; color: var(--gray-800); font-weight: 600; margin-top: 2px; }
+  .detail-actions { display: flex; gap: 0.75rem; }
+
+  /* ── TOAST ───────────────────────────────────── */
+  .toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+    background: var(--gray-800); color: #fff;
+    padding: 0.85rem 1.25rem; border-radius: 10px;
+    font-size: 0.88rem; font-weight: 500; box-shadow: var(--shadow-lg);
+    opacity: 0; transform: translateY(8px);
+    transition: all 0.3s; pointer-events: none;
+    display: flex; align-items: center; gap: 8px; max-width: 320px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+  .toast.info { background: var(--blue-mid); }
+
+  /* ── MODAL ───────────────────────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 2000; display: flex; align-items: center; justify-content: center;
+    padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: #fff; border-radius: var(--radius-lg); max-width: 520px; width: 100%;
+    padding: 2rem; max-height: 90vh; overflow-y: auto;
+    transform: scale(0.95); transition: transform 0.25s;
+  }
+  .modal-overlay.open .modal { transform: scale(1); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .modal-header h3 { font-size: 1.15rem; font-weight: 700; color: var(--blue); }
+  .modal-close { background: var(--gray-100); border: none; border-radius: 8px; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+  .modal-close:hover { background: var(--gray-200); }
+
+  /* ── BREADCRUMB ──────────────────────────────── */
+  .breadcrumb { padding: 0.85rem 1.25rem; background: var(--gray-50); border-bottom: 1px solid var(--gray-100); }
+  .breadcrumb-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--gray-400); }
+  .breadcrumb-inner a { color: var(--blue-mid); text-decoration: none; }
+  .breadcrumb-inner a:hover { text-decoration: underline; }
+
+  /* ── FOOTER ──────────────────────────────────── */
+  footer {
+    background: var(--gray-900); color: rgba(255,255,255,0.7);
+    padding: 3rem 1.25rem 1.5rem;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2rem; }
+  .footer-brand p { font-size: 0.88rem; margin-top: 0.75rem; line-height: 1.7; }
+  .footer-col h4 { color: #fff; font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+  .footer-col a { display: block; color: rgba(255,255,255,0.6); font-size: 0.85rem; text-decoration: none; margin-bottom: 0.5rem; transition: var(--transition); }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+  .footer-bottom p { font-size: 0.8rem; }
+
+  /* ── RESPONSIVE ──────────────────────────────── */
+  @media (max-width: 900px) {
+    .profile-grid { grid-template-columns: 1fr; }
+    .contact-sidebar { position: static; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .admin-sidebar { width: 200px; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #fff; padding: 1rem; border-bottom: 1px solid var(--gray-100); gap: 0.25rem; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .search-box { flex-direction: column; }
+    .search-box select, .search-box input { min-width: 0; }
+    .btn-search { width: 100%; justify-content: center; }
+    .hero-stats { gap: 1.25rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .admin-layout { flex-direction: column; }
+    .admin-sidebar { width: 100%; height: auto; position: relative; padding-bottom: 0; }
+    .admin-main { overflow: auto; }
+    table { display: block; overflow-x: auto; }
+    .profile-content { padding: 1.25rem; }
+  }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+  }
+  .anim { animation: fadeIn 0.5s ease both; }
+  .anim-d1 { animation-delay: 0.1s; }
+  .anim-d2 { animation-delay: 0.2s; }
+  .anim-d3 { animation-delay: 0.3s; }
+
+  /* Page transitions */
+  .page { animation: fadeIn 0.3s ease both; }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 4rem 1rem; color: var(--gray-400); }
+  .empty-state .e-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state h3 { color: var(--gray-600); margin-bottom: 0.5rem; }
+
+  /* Rating stars display */
+  .star-display { display: inline-flex; gap: 2px; }
+  .star-display span { color: #f59e0b; font-size: 0.9rem; }
+  .star-display span.empty { color: var(--gray-200); }
+
+  /* Chips */
+  .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-pale); color: var(--blue-mid); font-size: 0.78rem; font-weight: 600; padding: 4px 12px; border-radius: 50px; }
+
+  /* Premium highlight */
+  .premium-card { border: 2px solid #f59e0b !important; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--gray-200); margin-bottom: 1.5rem; }
+  .tab-btn { background: none; border: none; padding: 0.65rem 1.25rem; font-size: 0.88rem; font-weight: 600; color: var(--gray-500); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: var(--transition); font-family: 'DM Sans', sans-serif; }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .tab-btn:hover { color: var(--blue-mid); }
+
+  /* Devis modal extra */
+  .devis-sent { text-align: center; padding: 1rem; }
+  .devis-sent .d-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+
+  /* ── LOGIN ADMIN ─────────────────────────────── */
+  .login-overlay {
+    position: fixed; inset: 0; z-index: 9998;
+    background: linear-gradient(135deg, var(--gray-900) 0%, #0f2044 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .login-box {
+    background: #fff; border-radius: 24px;
+    padding: 2.5rem 2rem; width: 100%; max-width: 400px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    text-align: center; animation: fadeIn 0.4s ease;
+  }
+  .login-box .l-logo { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .login-box h2 { font-size: 1.4rem; color: var(--blue); margin-bottom: 0.4rem; }
+  .login-box p { color: var(--gray-500); font-size: 0.88rem; margin-bottom: 1.75rem; }
+  .login-error {
+    background: #fee2e2; border: 1px solid #fca5a5;
+    color: #991b1b; font-size: 0.85rem; font-weight: 600;
+    padding: 0.65rem 1rem; border-radius: 8px; margin-bottom: 1rem;
+    display: none;
+  }
+  .login-error.show { display: block; }
+  .login-attempts {
+    background: #fef3c7; border: 1px solid #fcd34d;
+    color: #92400e; font-size: 0.82rem;
+    padding: 0.5rem 1rem; border-radius: 8px; margin-top: 0.75rem;
+    display: none;
+  }
+  .login-attempts.show { display: block; }
+  .login-locked {
+    background: #fee2e2; border-radius: 12px; padding: 1.5rem;
+    color: #991b1b; margin-top: 1rem; display: none;
+  }
+  .login-locked.show { display: block; }
+  .admin-logout {
+    background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.4rem 0.9rem; border-radius: 8px;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    transition: var(--transition); font-family: 'DM Sans', sans-serif;
+  }
+  .admin-logout:hover { background: rgba(255,255,255,0.2); color: #fff; }
+  .pwd-input-wrap { position: relative; }
+  .pwd-input-wrap input { padding-right: 3rem !important; }
+  .pwd-toggle {
+    position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 1rem;
+    color: var(--gray-400); padding: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo" onclick="showPage('home')">
+      <div class="logo-icon">🔧</div>
+      Arti<span>Pro</span> BTP
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#" onclick="showPage('home')">🏠 Accueil</a>
+      <a href="#" onclick="showPage('results')">🔍 Artisans</a>
+      <a href="#" onclick="showPage('register')">📝 Devenir Artisan</a>
+      <a href="#" class="nav-cta btn-orange" onclick="showPage('register')">Inscrire mon activité</a>
+      <a href="#" class="nav-admin" onclick="goAdmin()">⚙️ Admin</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+  <!-- Indicateur statut Firebase -->
+  <div id="firebaseStatus" style="display:none;position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:#1e3a5f;color:#fff;padding:0.5rem 1.25rem;border-radius:20px;font-size:0.8rem;z-index:9999;box-shadow:0 4px 15px rgba(0,0,0,0.25);white-space:nowrap"></div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE: HOME                                -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <!-- Slideshow background: artisans BTP africains -->
+    <div class="hero-slides" id="heroSlides">
+      <div class="hero-slide active" style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1400&q=80&fit=crop')"></div>
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1400&q=80&fit=crop')"></div>
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1400&q=80&fit=crop')"></div>
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80&fit=crop')"></div>
+      <div class="hero-slide" style="background-image:url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1400&q=80&fit=crop')"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-badge">✅ Plateforme locale vérifiée</div>
+      <h1>Trouvez un artisan <em>fiable</em><br>près de chez vous</h1>
+      <p>Électriciens, plombiers, maçons et autres professionnels disponibles rapidement dans votre ville</p>
+
+      <div class="search-box anim">
+        <select id="heroMetier">
+          <option value="">🔧 Tous les métiers</option>
+          <option value="electricien">⚡ Électricien</option>
+          <option value="plombier">🚿 Plombier</option>
+          <option value="macon">🧱 Maçon</option>
+          <option value="peintre">🎨 Peintre</option>
+          <option value="menuisier">🪚 Menuisier</option>
+          <option value="carreleur">🔲 Carreleur</option>
+          <option value="charpentier">🏗️ Charpentier</option>
+          <option value="soudeur">⚙️ Soudeur</option>
+          <option value="plafonneur">🏠 Plafonneur</option>
+        </select>
+        <select id="heroVille" onchange="peuplerQuartiersHero()" style="flex:1">
+          <option value="">🏙️ Toutes les villes</option>
+          <option value="Cotonou">Cotonou</option>
+          <option value="Porto-Novo">Porto-Novo</option>
+          <option value="Abomey-Calavi">Abomey-Calavi</option>
+          <option value="Parakou">Parakou</option>
+          <option value="Bohicon">Bohicon</option>
+          <option value="Abomey">Abomey</option>
+          <option value="Ouidah">Ouidah</option>
+          <option value="Lokossa">Lokossa</option>
+          <option value="Natitingou">Natitingou</option>
+          <option value="Djougou">Djougou</option>
+          <option value="Kandi">Kandi</option>
+          <option value="Allada">Allada</option>
+          <option value="Savalou">Savalou</option>
+          <option value="Comè">Comè</option>
+          <option value="Nikki">Nikki</option>
+          <option value="Aplahoué">Aplahoué</option>
+          <option value="Grand-Popo">Grand-Popo</option>
+          <option value="Malanville">Malanville</option>
+          <option value="Tchaourou">Tchaourou</option>
+          <option value="Bembèrèkè">Bembèrèkè</option>
+          <option value="Bassila">Bassila</option>
+          <option value="Tanguiéta">Tanguiéta</option>
+          <option value="Kérou">Kérou</option>
+          <option value="Zagnanado">Zagnanado</option>
+          <option value="Glazoué">Glazoué</option>
+          <option value="Savè">Savè</option>
+          <option value="Sèmè-Kpodji">Sèmè-Kpodji</option>
+        </select>
+        <select id="heroQuartier" disabled style="flex:1">
+          <option value="">📍 Tous les quartiers</option>
+        </select>
+        <button class="btn-search" onclick="doSearch()">
+          🔍 Rechercher
+        </button>
+      </div>
+
+      <div class="hero-stats anim anim-d2">
+        <div class="hero-stat"><strong id="stat-total">0</strong><span>Artisans inscrits</span></div>
+        <div class="hero-stat"><strong id="stat-verified">0</strong><span>Artisans vérifiés</span></div>
+        <div class="hero-stat"><strong id="stat-jobs">9+</strong><span>Métiers couverts</span></div>
+        <div class="hero-stat"><strong>⭐ 4.7</strong><span>Note moyenne</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section cats">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-label">Nos métiers</span>
+        <h2>Trouvez le bon professionnel</h2>
+        <p>Tous les corps de métier du bâtiment en un seul endroit</p>
+      </div>
+      <div class="cat-grid">
+        <div class="cat-card anim" onclick="filterByCat('electricien')">
+          <div class="cat-icon" style="background:#fef9c3">⚡</div>
+          <h3>Électricité</h3>
+          <small class="cat-count-electricien">— artisans</small>
+        </div>
+        <div class="cat-card anim anim-d1" onclick="filterByCat('plombier')">
+          <div class="cat-icon" style="background:#e0f2fe">🚿</div>
+          <h3>Plomberie</h3>
+          <small class="cat-count-plombier">— artisans</small>
+        </div>
+        <div class="cat-card anim anim-d2" onclick="filterByCat('macon')">
+          <div class="cat-icon" style="background:#fce7f3">🧱</div>
+          <h3>Maçonnerie</h3>
+          <small class="cat-count-macon">— artisans</small>
+        </div>
+        <div class="cat-card anim" onclick="filterByCat('peintre')">
+          <div class="cat-icon" style="background:#f0fdf4">🎨</div>
+          <h3>Peinture</h3>
+          <small class="cat-count-peintre">— artisans</small>
+        </div>
+        <div class="cat-card anim anim-d1" onclick="filterByCat('menuisier')">
+          <div class="cat-icon" style="background:#fff7ed">🪚</div>
+          <h3>Menuiserie</h3>
+          <small class="cat-count-menuisier">— artisans</small>
+        </div>
+        <div class="cat-card anim anim-d2" onclick="filterByCat('carreleur')">
+          <div class="cat-icon" style="background:#f5f3ff">🔲</div>
+          <h3>Carrelage</h3>
+          <small class="cat-count-carreleur">— artisans</small>
+        </div>
+        <div class="cat-card anim" onclick="filterByCat('charpentier')">
+          <div class="cat-icon" style="background:#ffe4e6">🏗️</div>
+          <h3>Charpenterie</h3>
+          <small class="cat-count-charpentier">— artisans</small>
+        </div>
+        <div class="cat-card anim anim-d1" onclick="filterByCat('soudeur')">
+          <div class="cat-icon" style="background:#ecfeff">⚙️</div>
+          <h3>Soudure</h3>
+          <small class="cat-count-soudeur">— artisans</small>
+        </div>
+        <div class="cat-card anim anim-d2" onclick="filterByCat('plafonneur')">
+          <div class="cat-icon" style="background:#f0f9ff">🏠</div>
+          <h3>Plâtrerie</h3>
+          <small class="cat-count-plafonneur">— artisans</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comment ça marche -->
+  <!-- Bande photos artisans BTP -->
+  <div class="photos-band">
+    <div class="photos-band-item" data-label="⚡ Électricien" style="background-image:url('https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=600&q=80&fit=crop')"></div>
+    <div class="photos-band-item" data-label="🔧 Plombier" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop')"></div>
+    <div class="photos-band-item" data-label="🧱 Maçon" style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&fit=crop')"></div>
+    <div class="photos-band-item" data-label="🎨 Peintre" style="background-image:url('https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=600&q=80&fit=crop')"></div>
+    <div class="photos-band-item" data-label="🪚 Menuisier" style="background-image:url('https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=600&q=80&fit=crop')"></div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-label">Simple et rapide</span>
+        <h2>Comment ça marche ?</h2>
+        <p>En 3 étapes, trouvez et contactez votre artisan</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step anim">
+          <div class="step-num">1</div>
+          <div class="step-icon">🔍</div>
+          <h3>Recherchez un artisan</h3>
+          <p>Choisissez votre métier et votre zone géographique pour trouver les artisans disponibles près de vous.</p>
+        </div>
+        <div class="step anim anim-d1">
+          <div class="step-num">2</div>
+          <div class="step-icon">👤</div>
+          <h3>Consultez son profil</h3>
+          <p>Voir la photo, les compétences, les avis des clients précédents et les photos de travaux réalisés.</p>
+        </div>
+        <div class="step anim anim-d2">
+          <div class="step-num">3</div>
+          <div class="step-icon">📞</div>
+          <h3>Contactez directement</h3>
+          <p>Appelez ou envoyez un message WhatsApp en un clic. Pas d'intermédiaire, contact direct et immédiat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured artisans -->
+  <section class="section" style="background:var(--gray-50)">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-label">Top artisans</span>
+        <h2>Artisans vérifiés du moment</h2>
+        <p>Professionnels sélectionnés et validés par notre équipe</p>
+      </div>
+      <div class="artisan-grid" id="featuredGrid"></div>
+      <div style="text-align:center;margin-top:2rem">
+        <button class="btn btn-outline btn-lg" onclick="showPage('results')">Voir tous les artisans →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust section -->
+  <section class="section trust">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 style="color:#fff">Pourquoi choisir BatiPro by Hugues ?</h2>
+        <p style="color:rgba(255,255,255,0.7)">Une plateforme de confiance pour vos travaux</p>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="t-icon">✅</div>
+          <h3>Artisans vérifiés</h3>
+          <p>Chaque artisan est validé manuellement par notre équipe avant publication</p>
+        </div>
+        <div class="trust-item">
+          <div class="t-icon">⭐</div>
+          <h3>Avis clients réels</h3>
+          <p>Les notes et avis proviennent de clients ayant réellement fait appel à l'artisan</p>
+        </div>
+        <div class="trust-item">
+          <div class="t-icon">⚡</div>
+          <h3>Réponse rapide</h3>
+          <p>Contact direct par WhatsApp ou téléphone, sans attente ni intermédiaire</p>
+        </div>
+        <div class="trust-item">
+          <div class="t-icon">📍</div>
+          <h3>Artisans locaux</h3>
+          <p>Des professionnels de votre quartier, disponibles rapidement</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages clients africains -->
+  <section class="section" style="background:#f8fafc">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-label">Ils nous font confiance</span>
+        <h2>Ce que disent nos clients</h2>
+        <p>Des centaines de familles satisfaites au Bénin</p>
+      </div>
+      <div class="temoignages-grid">
+        <div class="temoignage-card">
+          <div class="temoignage-photo" style="background-image:url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&q=80&fit=crop&crop=face')"></div>
+          <div class="temoignage-body">
+            <div class="temoignage-stars">★★★★★</div>
+            <p class="temoignage-text">"J'ai trouvé un électricien en moins de 10 minutes. Travail propre, rapide et prix honnête. Je recommande vivement !"</p>
+            <div class="temoignage-name">Adjoua Marie</div>
+            <div class="temoignage-ville">📍 Cotonou, Akpakpa</div>
+          </div>
+        </div>
+        <div class="temoignage-card">
+          <div class="temoignage-photo" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&fit=crop&crop=face')"></div>
+          <div class="temoignage-body">
+            <div class="temoignage-stars">★★★★★</div>
+            <p class="temoignage-text">"Le plombier est venu le jour même. Problème réglé en 2 heures. BatiPro by Hugues c'est vraiment pratique pour nous !"</p>
+            <div class="temoignage-name">Kofi Mensah</div>
+            <div class="temoignage-ville">📍 Porto-Novo, Ouando</div>
+          </div>
+        </div>
+        <div class="temoignage-card">
+          <div class="temoignage-photo" style="background-image:url('https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=400&q=80&fit=crop&crop=face')"></div>
+          <div class="temoignage-body">
+            <div class="temoignage-stars">★★★★⭐</div>
+            <p class="temoignage-text">"Maçon excellent, sérieux et ponctuel. Ma maison est bien construite. Merci BatiPro by Hugues pour ce service !"</p>
+            <div class="temoignage-name">Brice Ahouannou</div>
+            <div class="temoignage-ville">📍 Abomey-Calavi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SPONSORS ═══ -->
+  <div class="sponsors-section" id="sponsors">
+    <p class="sponsors-label">✨ Ils nous font confiance</p>
+    <div class="sponsors-track-wrapper">
+      <div class="sponsors-track" id="sponsorsTrack">
+
+        <!-- Sponsors réels (à remplacer quand vous en avez) -->
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#fff3e0">🏢</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Votre entreprise</div>
+            <div class="sponsor-tag">Sponsor Platine</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e8f5e9">🏗️</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">BTP Matériaux</div>
+            <div class="sponsor-tag">Sponsor Or</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e3f2fd">⚡</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Électro Bénin</div>
+            <div class="sponsor-tag">Sponsor Argent</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#fce4ec">🔧</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Quincaillerie Pro</div>
+            <div class="sponsor-tag">Sponsor Bronze</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#f3e5f5">🏠</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Immobilier Bénin</div>
+            <div class="sponsor-tag">Sponsor Argent</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e0f7fa">🎨</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Peintures Premium</div>
+            <div class="sponsor-tag">Sponsor Bronze</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#fff8e1">🧱</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Ciments du Bénin</div>
+            <div class="sponsor-tag">Sponsor Or</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e8f5e9">🔩</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Aciers & Métaux</div>
+            <div class="sponsor-tag">Sponsor Bronze</div>
+          </div>
+        </div>
+
+        <!-- Copie pour boucle infinie -->
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#fff3e0">🏢</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Votre entreprise</div>
+            <div class="sponsor-tag">Sponsor Platine</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e8f5e9">🏗️</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">BTP Matériaux</div>
+            <div class="sponsor-tag">Sponsor Or</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e3f2fd">⚡</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Électro Bénin</div>
+            <div class="sponsor-tag">Sponsor Argent</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#fce4ec">🔧</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Quincaillerie Pro</div>
+            <div class="sponsor-tag">Sponsor Bronze</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#f3e5f5">🏠</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Immobilier Bénin</div>
+            <div class="sponsor-tag">Sponsor Argent</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e0f7fa">🎨</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Peintures Premium</div>
+            <div class="sponsor-tag">Sponsor Bronze</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#fff8e1">🧱</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Ciments du Bénin</div>
+            <div class="sponsor-tag">Sponsor Or</div>
+          </div>
+        </div>
+        <div class="sponsor-card placeholder">
+          <div class="sponsor-logo" style="background:#e8f5e9">🔩</div>
+          <div class="sponsor-info">
+            <div class="sponsor-name">Aciers & Métaux</div>
+            <div class="sponsor-tag">Sponsor Bronze</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <button class="btn-devenir-sponsor" onclick="openModal('aproposModal')">
+      🤝 Devenir sponsor de BatiPro by Hugues
+    </button>
+  </div>
+
+  <!-- CTA Artisan -->
+  <section class="section">
+    <div class="section-inner" style="text-align:center">
+      <div style="background:linear-gradient(135deg,var(--orange),#f43f5e);border-radius:24px;padding:3rem 2rem;max-width:700px;margin:0 auto">
+        <h2 style="color:#fff;font-size:clamp(1.4rem,4vw,2rem);margin-bottom:0.75rem">Vous êtes artisan ?</h2>
+        <p style="color:rgba(255,255,255,0.85);margin-bottom:1.75rem">Inscrivez votre activité gratuitement et recevez des clients directement sur votre téléphone</p>
+        <button class="btn btn-lg" style="background:#fff;color:var(--orange);font-weight:700" onclick="showPage('register')">
+          📝 Inscrire mon activité gratuitement
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="color:#fff;margin-bottom:0.75rem">
+            <div class="logo-icon">🔧</div>
+            BatiPro <span style="color:var(--orange)">BTP</span>
+          </div>
+          <p>La plateforme de confiance pour trouver les meilleurs artisans du bâtiment près de chez vous. Par Hugues.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <a href="#" onclick="showPage('home')">Accueil</a>
+          <a href="#" onclick="showPage('results')">Tous les artisans</a>
+          <a href="#" onclick="showPage('register')">Devenir artisan</a>
+        </div>
+        <div class="footer-col">
+          <h4>Métiers</h4>
+          <a href="#" onclick="filterByCat('electricien')">Électricité</a>
+          <a href="#" onclick="filterByCat('plombier')">Plomberie</a>
+          <a href="#" onclick="filterByCat('macon')">Maçonnerie</a>
+          <a href="#" onclick="filterByCat('peintre')">Peinture</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="#" onclick="openModal('aproposModal');return false">À propos</a>
+          <a href="#" onclick="openModal('aproposModal');return false">Support</a>
+          <a href="#" onclick="openModal('conditionsModal');return false">Conditions d'utilisation</a>
+          <a href="#" onclick="openModal('confidentialiteModal');return false">Politique de confidentialité</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 BatiPro by Hugues. Tous droits réservés.</p>
+        <p>Fait avec ❤️ pour les artisans locaux</p>
+      </div>
+    </div>
+  </footer>
+</div><!-- end page-home -->
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE: RESULTS                             -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page" id="page-results">
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <div class="filter-row">
+        <select id="filterMetier" onchange="applyFilters()">
+          <option value="">🔧 Tous les métiers</option>
+          <option value="electricien">⚡ Électricien</option>
+          <option value="plombier">🚿 Plombier</option>
+          <option value="macon">🧱 Maçon</option>
+          <option value="peintre">🎨 Peintre</option>
+          <option value="menuisier">🪚 Menuisier</option>
+          <option value="carreleur">🔲 Carreleur</option>
+          <option value="charpentier">🏗️ Charpentier</option>
+          <option value="soudeur">⚙️ Soudeur</option>
+          <option value="plafonneur">🏠 Plafonneur</option>
+        </select>
+        <select id="filterVille" onchange="peuplerQuartiersFiltre();applyFilters()" style="min-width:160px">
+          <option value="">🏙️ Toutes les villes</option>
+          <option value="Cotonou">Cotonou</option>
+          <option value="Porto-Novo">Porto-Novo</option>
+          <option value="Abomey-Calavi">Abomey-Calavi</option>
+          <option value="Parakou">Parakou</option>
+          <option value="Bohicon">Bohicon</option>
+          <option value="Abomey">Abomey</option>
+          <option value="Ouidah">Ouidah</option>
+          <option value="Lokossa">Lokossa</option>
+          <option value="Natitingou">Natitingou</option>
+          <option value="Djougou">Djougou</option>
+          <option value="Kandi">Kandi</option>
+          <option value="Allada">Allada</option>
+          <option value="Savalou">Savalou</option>
+          <option value="Comè">Comè</option>
+          <option value="Nikki">Nikki</option>
+          <option value="Aplahoué">Aplahoué</option>
+          <option value="Grand-Popo">Grand-Popo</option>
+          <option value="Malanville">Malanville</option>
+          <option value="Tchaourou">Tchaourou</option>
+          <option value="Bembèrèkè">Bembèrèkè</option>
+          <option value="Bassila">Bassila</option>
+          <option value="Tanguiéta">Tanguiéta</option>
+          <option value="Kérou">Kérou</option>
+          <option value="Zagnanado">Zagnanado</option>
+          <option value="Glazoué">Glazoué</option>
+          <option value="Savè">Savè</option>
+          <option value="Sèmè-Kpodji">Sèmè-Kpodji</option>
+        </select>
+        <select id="filterQuartier" onchange="applyFilters()" style="min-width:180px" disabled>
+          <option value="">📍 Tous les quartiers</option>
+        </select>
+        <input type="text" id="filterNom" placeholder="🔍 Nom de l'artisan..." oninput="applyFilters()" style="min-width:180px"/>
+        <select id="filterNote" onchange="applyFilters()">
+          <option value="">⭐ Toutes les notes</option>
+          <option value="4">⭐ 4+ étoiles</option>
+          <option value="4.5">⭐ 4.5+ étoiles</option>
+        </select>
+        <select id="filterDispo" onchange="applyFilters()">
+          <option value="">🕐 Disponibilité</option>
+          <option value="disponible">✅ Disponible</option>
+          <option value="indisponible">❌ Indisponible</option>
+        </select>
+        <span class="results-count" id="resultsCount">0 artisans trouvés</span>
+      </div>
+    </div>
+  </div>
+  <div class="results-page">
+    <div class="results-content">
+      <div class="artisan-grid" id="resultsGrid"></div>
+      <div class="empty-state" id="emptyResults" style="display:none">
+        <div class="e-icon">🔍</div>
+        <h3>Aucun artisan trouvé</h3>
+        <p>Essayez de modifier vos filtres de recherche</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE: PROFILE                             -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page" id="page-profile">
+  <div id="profileContent"></div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE: REGISTER                            -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page" id="page-register">
+  <div class="form-page">
+    <div class="form-wrapper">
+      <div class="form-card">
+        <div class="form-header">
+          <div style="font-size:2.5rem;margin-bottom:0.5rem">🔧</div>
+          <h2>Inscrivez votre activité</h2>
+          <p>Rejoignez BatiPro by Hugues et recevez des clients directement</p>
+        </div>
+
+        <div id="registerForm">
+          <div class="form-note">
+            ℹ️ Votre profil sera visible après validation par notre équipe (24-48h)
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nom complet <span>*</span></label>
+              <input type="text" id="regNom" placeholder="Ex: Kouassi Jean-Paul" />
+            </div>
+            <div class="form-group">
+              <label>Téléphone <span>*</span></label>
+              <input type="tel" id="regTel" placeholder="Ex: +229 97 00 00 00" oninput="validateTel(this)" />
+              <small id="telError" style="color:#dc2626;display:none;font-size:0.78rem">⚠️ Numéro invalide (ex: +229 97 00 00 00)</small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>WhatsApp <span>*</span></label>
+              <input type="tel" id="regWhatsapp" placeholder="Ex: +229 97 00 00 00" />
+              <small style="color:var(--gray-400);font-size:0.78rem">💬 Si différent du téléphone</small>
+            </div>
+            <div class="form-group">
+              <label>Email <span>*</span></label>
+              <input type="email" id="regEmail" placeholder="Ex: jean@gmail.com" />
+              <small style="color:var(--gray-400);font-size:0.78rem">📧 Pour recevoir la confirmation</small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Métier <span>*</span></label>
+              <select id="regMetier">
+                <option value="">-- Choisissez votre métier --</option>
+                <option value="electricien">⚡ Électricien</option>
+                <option value="plombier">🚿 Plombier</option>
+                <option value="macon">🧱 Maçon</option>
+                <option value="peintre">🎨 Peintre</option>
+                <option value="menuisier">🪚 Menuisier</option>
+                <option value="carreleur">🔲 Carreleur</option>
+                <option value="charpentier">🏗️ Charpentier</option>
+                <option value="soudeur">⚙️ Soudeur</option>
+                <option value="plafonneur">🏠 Plafonneur</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Ville <span>*</span></label>
+              <select id="regVille" onchange="peuplerQuartiers('regVille','regQuartier')" required>
+                <option value="">-- Choisissez votre ville --</option>
+                <option value="Cotonou">Cotonou</option>
+                <option value="Porto-Novo">Porto-Novo</option>
+                <option value="Abomey-Calavi">Abomey-Calavi</option>
+                <option value="Parakou">Parakou</option>
+                <option value="Bohicon">Bohicon</option>
+                <option value="Abomey">Abomey</option>
+                <option value="Ouidah">Ouidah</option>
+                <option value="Lokossa">Lokossa</option>
+                <option value="Natitingou">Natitingou</option>
+                <option value="Djougou">Djougou</option>
+                <option value="Kandi">Kandi</option>
+                <option value="Allada">Allada</option>
+                <option value="Savalou">Savalou</option>
+                <option value="Comè">Comè</option>
+                <option value="Nikki">Nikki</option>
+                <option value="Aplahoué">Aplahoué</option>
+                <option value="Grand-Popo">Grand-Popo</option>
+                <option value="Malanville">Malanville</option>
+                <option value="Tchaourou">Tchaourou</option>
+                <option value="Bembèrèkè">Bembèrèkè</option>
+                <option value="Bassila">Bassila</option>
+                <option value="Tanguiéta">Tanguiéta</option>
+                <option value="Kérou">Kérou</option>
+                <option value="Zagnanado">Zagnanado</option>
+                <option value="Glazoué">Glazoué</option>
+                <option value="Savè">Savè</option>
+                <option value="Sèmè-Kpodji">Sèmè-Kpodji</option>
+                <option value="Cotonou-Est">Cotonou-Est</option>
+                <option value="Cotonou-Ouest">Cotonou-Ouest</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Quartier <span>*</span></label>
+              <select id="regQuartier" disabled required>
+                <option value="">-- Choisissez d'abord la ville --</option>
+              </select>
+              <small style="color:var(--gray-400);font-size:0.78rem">Sélectionnez d'abord la ville</small>
+            </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description de votre activité <span>*</span></label>
+            <textarea id="regDesc" placeholder="Décrivez vos compétences, votre expérience, vos spécialités..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Années d'expérience</label>
+            <input type="number" id="regExp" placeholder="Ex: 5" min="0" max="50" />
+          </div>
+
+          <div class="form-group">
+            <label>Photo de profil</label>
+            <div class="upload-area" onclick="document.getElementById('photoInput').click()">
+              <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(this)">
+              <div class="u-icon">📷</div>
+              <p id="uploadText">Cliquez pour ajouter une photo<br><small>PNG, JPG jusqu'à 5MB</small></p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Diplôme / Certificat / Attestation <span>*</span></label>
+            <div class="upload-area" id="diplomeArea" onclick="document.getElementById('diplomeInput').click()" style="border-color:#f59e0b">
+              <input type="file" id="diplomeInput" accept="image/*,.pdf" onchange="previewDiplome(this)">
+              <div class="u-icon" id="diplomeIcon">🎓</div>
+              <p id="diplomeText">Cliquez pour ajouter votre diplôme ou attestation<br><small>PNG, JPG, PDF jusqu'à 5MB</small></p>
+            </div>
+            <small style="color:var(--gray-500);font-size:0.78rem;margin-top:4px;display:block">
+              📌 CAP, BEP, attestation de formation, certificat de compétence, etc.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label>Disponibilité</label>
+            <select id="regDispo">
+              <option value="disponible">✅ Disponible maintenant</option>
+              <option value="indisponible">⏳ Pas disponible</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="submitRegistration()">
+            📝 Soumettre mon inscription
+          </button>
+        </div>
+
+        <div id="registerSuccess" style="display:none">
+          <div class="success-msg">
+            <div class="s-icon">🎉</div>
+            <h3>Inscription envoyée !</h3>
+            <p>Votre profil est en cours de validation par notre équipe. Vous serez notifié dans les 24 à 48 heures.</p>
+            <br>
+            <button class="btn btn-primary" onclick="showPage('home')">Retour à l'accueil</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PAGE: ADMIN                               -->
+<!-- ══════════════════════════════════════════ -->
+<div class="page" id="page-admin">
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="s-logo">
+        <span>⚙️ BatiPro Admin</span>
+        <small>Tableau de bord</small>
+      </div>
+      <nav class="s-nav">
+        <div class="s-section">Principal</div>
+        <a href="#" class="active" onclick="showAdminSection('dashboard',this)">📊 Dashboard</a>
+        <div class="s-section">Artisans</div>
+        <a href="#" onclick="showAdminSection('pending',this)">⏳ En attente <span id="pendingCount" style="background:var(--orange);color:#fff;border-radius:50%;padding:1px 7px;font-size:0.75rem;margin-left:auto"></span></a>
+        <a href="#" onclick="showAdminSection('all',this)">👥 Tous les artisans</a>
+        <a href="#" onclick="showAdminSection('verified',this)">✅ Vérifiés</a>
+        <a href="#" onclick="showAdminSection('rejected',this)">❌ Refusés</a>
+        <div class="s-section">Paramètres</div>
+        <a href="#" onclick="showPage('home')">🏠 Voir le site</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1 id="adminTitle">📊 Dashboard</h1>
+        <div style="display:flex;align-items:center;gap:1rem">
+          <div style="font-size:0.82rem;color:var(--gray-500)">BatiPro by Hugues – Panel Admin</div>
+          <button class="admin-logout" onclick="adminLogout()">🚪 Déconnexion</button>
+        </div>
+      </div>
+      <div class="admin-content">
+
+        <!-- Dashboard -->
+        <div class="admin-section active" id="section-dashboard">
+          <div class="stat-grid" id="adminStats"></div>
+          <div class="table-card">
+            <div class="table-header">
+              <h3>Dernières inscriptions</h3>
+            </div>
+            <div id="recentTable"></div>
+          </div>
+        </div>
+
+        <!-- Pending -->
+        <div class="admin-section" id="section-pending">
+          <div class="table-card">
+            <div class="table-header">
+              <h3>⏳ En attente de validation</h3>
+              <input type="text" placeholder="🔍 Rechercher un artisan..." oninput="renderPendingCards(this.value)" id="searchPending" style="min-width:220px">
+            </div>
+            <div id="pendingCards"></div>
+          </div>
+        </div>
+
+        <!-- All -->
+        <div class="admin-section" id="section-all">
+          <div class="table-card">
+            <div class="table-header">
+              <h3>👥 Tous les artisans</h3>
+              <input type="text" placeholder="Rechercher..." oninput="adminSearch(this.value,'all')" id="searchAll">
+            </div>
+            <div id="allTable"></div>
+          </div>
+        </div>
+
+        <!-- Verified -->
+        <div class="admin-section" id="section-verified">
+          <div class="table-card">
+            <div class="table-header">
+              <h3>✅ Artisans vérifiés</h3>
+            </div>
+            <div id="verifiedTable"></div>
+          </div>
+        </div>
+
+        <!-- Rejected -->
+        <div class="admin-section" id="section-rejected">
+          <div class="table-card">
+            <div class="table-header">
+              <h3>❌ Artisans refusés</h3>
+            </div>
+            <div id="rejectedTable"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MODAL: Détail Artisan (Validation)        -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <h3>👤 Fiche de l'artisan</h3>
+      <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div id="detailModalContent"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MODAL: Edit Artisan                       -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>✏️ Modifier l'artisan</h3>
+      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <div id="editModalContent"></div>
+  </div>
+</div>
+
+<!-- MODAL: Devis -->
+<div class="modal-overlay" id="devisModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📋 Demander un devis</h3>
+      <button class="modal-close" onclick="closeModal('devisModal')">✕</button>
+    </div>
+    <div id="devisContent">
+      <div class="form-group">
+        <label>Votre nom</label>
+        <input type="text" id="devisNom" placeholder="Votre nom complet"/>
+      </div>
+      <div class="form-group">
+        <label>Votre téléphone</label>
+        <input type="tel" id="devisTel" placeholder="+229 00 00 00 00"/>
+      </div>
+      <div class="form-group">
+        <label>Description des travaux</label>
+        <textarea id="devisDesc" placeholder="Décrivez vos travaux en détail..." style="min-height:100px"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Budget estimé</label>
+        <input type="text" id="devisBudget" placeholder="Ex: 50 000 FCFA"/>
+      </div>
+      <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="sendDevis()">
+        📤 Envoyer la demande de devis
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN ADMIN OVERLAY -->
+<div class="login-overlay" id="loginOverlay" style="display:none">
+  <div class="login-box">
+    <div class="l-logo">🔐</div>
+    <h2>Accès Administrateur</h2>
+    <p>Entrez vos identifiants pour accéder au panel de gestion</p>
+
+    <div class="login-error" id="loginError">❌ Identifiants incorrects</div>
+
+    <div class="form-group" style="text-align:left">
+      <label style="font-size:0.85rem;font-weight:600;color:var(--gray-700)">Identifiant</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username"
+        style="width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:0.75rem 1rem;font-size:0.95rem;font-family:'DM Sans',sans-serif;outline:none;margin-top:0.4rem;background:var(--gray-50)"
+        onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+
+    <div class="form-group" style="text-align:left;margin-top:0.75rem">
+      <label style="font-size:0.85rem;font-weight:600;color:var(--gray-700)">Mot de passe</label>
+      <div class="pwd-input-wrap" style="margin-top:0.4rem">
+        <input type="password" id="loginPwd" placeholder="••••••••" autocomplete="current-password"
+          style="width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:0.75rem 1rem;font-size:0.95rem;font-family:'DM Sans',sans-serif;outline:none;background:var(--gray-50)"
+          onkeydown="if(event.key==='Enter')doLogin()"/>
+        <button class="pwd-toggle" onclick="togglePwd()" type="button" id="pwdToggleBtn">👁️</button>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:1.25rem" onclick="doLogin()" id="loginBtn">
+      🔑 Se connecter
+    </button>
+
+    <div class="login-attempts" id="loginAttempts"></div>
+    <div class="login-locked" id="loginLocked">
+      🔒 <strong>Accès bloqué</strong><br>
+      <small>Trop de tentatives. Réessayez dans <span id="lockTimer">5:00</span></small>
+    </div>
+
+    <button onclick="closLoginOverlay()" style="background:none;border:none;color:var(--gray-400);font-size:0.82rem;margin-top:1.25rem;cursor:pointer;font-family:'DM Sans',sans-serif">
+      ← Retour au site
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SCRIPTS                                   -->
+<!-- ══════════════════════════════════════════ -->
+<!-- FIREBASE SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // ✅ Config Firebase correcte (artiprobtp)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDtSJ98km2n6bCTAMEfbPUUVLUx3hZN1ik",
+    authDomain: "artiprobtp.firebaseapp.com",
+    projectId: "artiprobtp",
+    storageBucket: "artiprobtp.firebasestorage.app",
+    messagingSenderId: "589310545973",
+    appId: "1:589310545973:web:8ae44cdb10a2b9f4f1617c",
+    measurementId: "G-PMVP78K6DL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // ─── CHARGER les artisans depuis Firebase ────────────────────────────────────
+  window._loadFromFirebase = async function() {
+    try {
+      showFirebaseStatus('chargement');
+      const q = query(collection(db, 'artisans'), orderBy('dateInscription', 'desc'));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        const data = [];
+        snapshot.forEach(docSnap => {
+          data.push({ ...docSnap.data(), _docId: docSnap.id });
+        });
+        artisans = data;
+        nextId = Math.max(...artisans.map(a => a.id || 0), 0) + 1;
+        updateStats();
+        if(typeof renderAdmin === 'function') renderAdmin();
+        if(typeof applyFilters === 'function') applyFilters();
+        showFirebaseStatus('connecte', artisans.length);
+        console.log('✅ ' + artisans.length + ' artisans chargés depuis Firebase');
+      } else {
+        // Base vide : pousser les artisans de démo
+        showFirebaseStatus('init');
+        await window._pushDemoToFirebase();
+      }
+    } catch(e) {
+      showFirebaseStatus('erreur');
+      console.warn('⚠️ Firebase non disponible, mode local:', e.message);
+    }
+  };
+
+  // ─── POUSSER les artisans de démo (première fois seulement) ─────────────────
+  window._pushDemoToFirebase = async function() {
+    try {
+      for(const a of artisans) {
+        const data = {...a};
+        delete data._docId;
+        const ref = await addDoc(collection(db, 'artisans'), data);
+        a._docId = ref.id;
+      }
+      console.log('✅ Artisans de démo envoyés vers Firebase');
+      showFirebaseStatus('connecte', artisans.length);
+    } catch(e) {
+      console.warn('⚠️ Erreur push démo:', e.message);
+    }
+  };
+
+  // ─── SAUVEGARDER un artisan (nouveau ou existant) ────────────────────────────
+  window._saveArtisanToFirebase = async function(artisan) {
+    try {
+      const data = {...artisan};
+      delete data._docId;
+      if(artisan._docId) {
+        // Mise à jour
+        await updateDoc(doc(db, 'artisans', artisan._docId), data);
+        console.log('✅ Artisan mis à jour:', artisan.nom);
+      } else {
+        // Nouveau
+        const ref = await addDoc(collection(db, 'artisans'), data);
+        artisan._docId = ref.id;
+        console.log('✅ Nouvel artisan sauvegardé:', artisan.nom);
+      }
+    } catch(e) {
+      console.warn('⚠️ Erreur sauvegarde Firebase:', e.message);
+    }
+  };
+
+  // ─── SUPPRIMER un artisan ────────────────────────────────────────────────────
+  window._deleteArtisanFromFirebase = async function(docId) {
+    try {
+      if(docId) {
+        await deleteDoc(doc(db, 'artisans', docId));
+        console.log('✅ Artisan supprimé de Firebase');
+      }
+    } catch(e) {
+      console.warn('⚠️ Erreur suppression Firebase:', e.message);
+    }
+  };
+
+  // ─── Indicateur de statut Firebase ──────────────────────────────────────────
+  function showFirebaseStatus(status, count) {
+    const el = document.getElementById('firebaseStatus');
+    if(!el) return;
+    const msgs = {
+      chargement: '🔄 Connexion à Firebase...',
+      connecte: '🟢 Firebase connecté — ' + (count||0) + ' artisans',
+      init: '⚙️ Initialisation de la base...',
+      erreur: '🔴 Mode hors-ligne (Firebase indisponible)'
+    };
+    el.textContent = msgs[status] || '';
+    el.style.display = 'block';
+    if(status === 'connecte') setTimeout(() => el.style.display='none', 3000);
+  }
+
+  // ─── Démarrage ───────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(window._loadFromFirebase, 800);
+  });
+</script>
+
+<script>
+// ─── DATABASE ────────────────────────────────────────────────────────────────
+let artisans = JSON.parse(localStorage.getItem('artisans_db') || 'null') || [
+  {
+    id: 1, nom: "Kofi Mensah", metier: "electricien", zone: "Cotonou, Akpakpa",
+    tel: "+22997112233", desc: "Électricien professionnel avec 12 ans d'expérience. Installation, dépannage, tableau électrique, climatisation. Travail soigné et rapide.",
+    photo: "", statut: "premium", note: 4.8, avis: 47, exp: 12, dispo: "disponible",
+    reviews: [
+      {auteur:"Marc D.", note:5, texte:"Excellent travail, rapide et propre. Je recommande vivement.", date:"15 Jan 2025"},
+      {auteur:"Fatoumata K.", note:5, texte:"Très professionnel, a réparé mon tableau en urgence.", date:"2 Jan 2025"},
+      {auteur:"Ahmed S.", note:4, texte:"Bon travail, prix correct.", date:"20 Déc 2024"}
+    ],
+    date: "2024-10-01"
+  },
+  {
+    id: 2, nom: "Amadou Diallo", metier: "plombier", zone: "Porto-Novo, Ouando",
+    tel: "+22996223344", desc: "Plombier qualifié, 8 ans d'expérience. Réparation fuite, installation sanitaire, chauffe-eau, tuyauterie.",
+    photo: "", statut: "verified", note: 4.5, avis: 31, exp: 8, dispo: "disponible",
+    reviews: [
+      {auteur:"Chantal B.", note:5, texte:"Très rapide et efficace pour réparer ma fuite.", date:"10 Jan 2025"},
+      {auteur:"Pierre M.", note:4, texte:"Bon plombier, ponctuel.", date:"5 Jan 2025"}
+    ],
+    date: "2024-11-15"
+  },
+  {
+    id: 3, nom: "Issouf Ouédraogo", metier: "macon", zone: "Cotonou, Fidjrossè",
+    tel: "+22990334455", desc: "Maçon expérimenté, 15 ans dans le BTP. Construction, rénovation, fondation, crépissage, dallage.",
+    photo: "", statut: "verified", note: 4.7, avis: 62, exp: 15, dispo: "disponible",
+    reviews: [
+      {auteur:"Dr. Sokpè", note:5, texte:"Construction de mon garage réalisée parfaitement.", date:"8 Jan 2025"},
+      {auteur:"Mme Agossa", note:5, texte:"Excellent maçon, sérieux et ponctuel.", date:"3 Jan 2025"}
+    ],
+    date: "2024-09-20"
+  },
+  {
+    id: 4, nom: "Brice Ahouansou", metier: "peintre", zone: "Abomey-Calavi",
+    tel: "+22991445566", desc: "Peintre en bâtiment avec 6 ans d'expérience. Peinture intérieure et extérieure, enduit, déco.",
+    photo: "", statut: "premium", note: 4.9, avis: 28, exp: 6, dispo: "disponible",
+    reviews: [
+      {auteur:"Stéphane H.", note:5, texte:"Magnifique peinture dans mon salon. Très propre.", date:"12 Jan 2025"},
+      {auteur:"Marie-Claire T.", note:5, texte:"Excellent travail, couleurs parfaites.", date:"7 Jan 2025"}
+    ],
+    date: "2024-12-01"
+  },
+  {
+    id: 5, nom: "Romuald Koffi", metier: "menuisier", zone: "Cotonou, Cadjehoun",
+    tel: "+22994556677", desc: "Menuisier-ébéniste, 10 ans d'expérience. Portes, fenêtres, meubles sur mesure, cuisines, dressing.",
+    photo: "", statut: "verified", note: 4.6, avis: 39, exp: 10, dispo: "indisponible",
+    reviews: [
+      {auteur:"Paul N.", note:5, texte:"Dressing magnifique, parfaitement réalisé.", date:"9 Jan 2025"},
+      {auteur:"Evelyne D.", note:4, texte:"Très bon travail, un peu de retard.", date:"4 Jan 2025"}
+    ],
+    date: "2024-10-10"
+  },
+  {
+    id: 6, nom: "Thierry Azondekon", metier: "carreleur", zone: "Parakou",
+    tel: "+22993667788", desc: "Carreleur professionnel, 9 ans d'expérience. Pose carrelage sol et mur, faïence, mosaïque, joint.",
+    photo: "", statut: "verified", note: 4.4, avis: 22, exp: 9, dispo: "disponible",
+    reviews: [
+      {auteur:"Bertrand K.", note:5, texte:"Très beau carrelage dans ma salle de bain.", date:"6 Jan 2025"},
+      {auteur:"Inès M.", note:4, texte:"Bon travail, prix raisonnable.", date:"2 Jan 2025"}
+    ],
+    date: "2024-11-05"
+  },
+  {
+    id: 7, nom: "Sébastien Vodounou", metier: "charpentier", zone: "Bohicon",
+    tel: "+22992778899", desc: "Charpentier, couverture, zinguerie. Construction et rénovation toiture, charpente bois, tuiles.",
+    photo: "", statut: "verified", note: 4.3, avis: 18, exp: 11, dispo: "disponible",
+    reviews: [
+      {auteur:"Jean-Marie A.", note:4, texte:"Toiture réparée rapidement avant les pluies.", date:"1 Jan 2025"}
+    ],
+    date: "2024-12-15"
+  },
+  {
+    id: 8, nom: "Cyrille Agbavor", metier: "soudeur", zone: "Cotonou, Dantokpa",
+    tel: "+22995889900", desc: "Soudeur qualifié, ferronnerie, grilles, portails, clôtures, escaliers métalliques.",
+    photo: "", statut: "verified", note: 4.7, avis: 35, exp: 7, dispo: "disponible",
+    reviews: [
+      {auteur:"Raoul S.", note:5, texte:"Portail superbe, réalisé en 2 jours.", date:"11 Jan 2025"},
+      {auteur:"Danielle P.", note:5, texte:"Grilles fenêtres parfaites.", date:"5 Jan 2025"}
+    ],
+    date: "2024-10-25"
+  },
+  {
+    id: 9, nom: "Damien Sagbo", metier: "plafonneur", zone: "Abomey-Calavi, Godomey",
+    tel: "+22998990011", desc: "Plafonneur-plâtrier, faux-plafond, cloisons, enduit, isolation phonique et thermique.",
+    photo: "", statut: "verified", note: 4.5, avis: 27, exp: 8, dispo: "disponible",
+    reviews: [
+      {auteur:"Alphonse M.", note:5, texte:"Faux-plafond impeccable dans mon bureau.", date:"8 Jan 2025"}
+    ],
+    date: "2024-11-20"
+  },
+  {
+    id: 10, nom: "Francis Houénou", metier: "electricien", zone: "Porto-Novo, Djègan",
+    tel: "+22997001122", desc: "Électricien général, installation neuve, rénovation, dépannage urgence 24h/24.",
+    photo: "", statut: "pending", note: 0, avis: 0, exp: 4, dispo: "disponible",
+    reviews: [], date: "2025-01-10"
+  },
+  {
+    id: 11, nom: "Grégoire Atindehou", metier: "plombier", zone: "Cotonou, Cadjehoun",
+    tel: "+22996113344", desc: "Plombier sanitaire, installation salle de bain complète, robinetterie, pompe à eau.",
+    photo: "", statut: "pending", note: 0, avis: 0, exp: 3, dispo: "disponible",
+    reviews: [], date: "2025-01-12"
+  },
+  {
+    id: 12, nom: "Hervé Dossou", metier: "peintre", zone: "Cotonou, Gbèdjromèdé",
+    tel: "+22991224455", desc: "Peintre bâtiment, peinture décorative, textures, ragréage, remise en état appartement.",
+    photo: "", statut: "rejected", note: 0, avis: 0, exp: 2, dispo: "indisponible",
+    reviews: [], date: "2025-01-05"
+  }
+];
+
+let nextId = artisans.length + 1;
+let currentProfile = null;
+let currentDevisArtisan = null;
+let searchFilters = { metier: '', zone: '' };
+
+
+// ─── VILLES ET QUARTIERS DU BÉNIN ────────────────────────────────────────────
+const VILLES_BENIN = {
+  "Cotonou": ["Akpakpa","Cadjehoun","Fidjrossè","Gbèdjromèdé","Agla","Dantokpa","Vèdoko","Houéyiho","Sainte-Rita","Zogbohouè","Kpankpan","Gbèto","Aïbatin","Tokpa","Missèbo","Haie Vive","Cocotiers","Jéricho","Mènontin","Ablogamè","Enagnon","Vodjè","Wologuèdè","Zongo","Fifadji","Ladji","Kpota","Ekpè","Avotrou","PK3","PK6","PK10","Cité Houéyiho","Cité Vie Nouvelle"],
+  "Porto-Novo": ["Ouando","Djègan","Agboville","Tokpota","Houinmè","Avrankou","Akogbato","Katagon","Gbèdégbé","Dowa","Hogbonou","Yèvèdo","Djassin","Ahouannou","Avlékété","Kpèvi","Agbokou","Zonmon","Toukomè","Missérété","Akpro-Missérété"],
+  "Abomey-Calavi": ["Godomey","Hêvié","Kpanroun","Zinvié","Togba","Ouèdo","Akassato","Dékanmè","Glo-Djigbé","Sékou","Tankpè","Womey","Houakpè-Daho","Gakpè","Dodomè","Agori","Agblangandan","Zè","So-Ava"],
+  "Parakou": ["Banikanni","Kpébié","Madina","Zongo","Albarika","Wèwènnou","Tourou","Guéma","Arafat","Dounkassa","Gaani","Baka","Gah","Boko","Kpebirè","Banikanni-Nord","Banikanni-Sud"],
+  "Bohicon": ["Lissèzoun","Avogbanna","Saclo","Zakpota","Klouékanmè","Agbangnizoun","Djidja","Covè","Ouinhi","Za-Kpota","Agouna","Zogbadjè"],
+  "Abomey": ["Hounli","Agrimey","Dévémè","Sèhomi","Zounzonmè","Vidolé","Zogbadjè","Cana","Zoungbonou","Adandokpodji","Djèhoué","Hounvè"],
+  "Ouidah": ["Pahou","Savi","Avlékété","Gakpè","Houakpè","Ahouannonzoun","Tohou","Djègbadji","Zoungbonou"],
+  "Lokossa": ["Centre","Hlassamè","Dohi","Koudo","Kpinnou","Agonkamè"],
+  "Natitingou": ["Perma","Centre","Kouarfa","Gbèrè","Kouporgou","Tchoumi-Tchoumi","Bori"],
+  "Djougou": ["Centre","Partago","Kolokondé","Pabégou","Bariènou","Bougou"],
+  "Kandi": ["Sori","Angaradébou","Banikoa","Libantè","Serekali","Gando","Centre"],
+  "Allada": ["Centre","Hinvi","Sékou","Attogon","Tohouè","Dodji-Bata","Lissazounmè"],
+  "Savalou": ["Centre","Glazoué","Agouna","Djalloukou","Gobada","Ottola"],
+  "Comè": ["Centre","Agatogbo","Oumako","Yègodé","Zoungbomè"],
+  "Nikki": ["Centre","Pèrèrè","Suya","Biro","Gori","Tankari"],
+  "Aplahoué": ["Centre","Djakotomey","Dogbo","Klouékanmè","Lalo","Toviklin"],
+  "Grand-Popo": ["Centre","Avlo","Djanglanmè","Gbécon","Tèdji"],
+  "Malanville": ["Centre","Guéné","Karimama","Madécali","Garou"],
+  "Tchaourou": ["Centre","Bétérou","Alafiarou","Kika","Sanson"],
+  "Bembèrèkè": ["Centre","Ina","Bouanri","Gamia","Gogounou"],
+  "Bassila": ["Centre","Manigri","Pénessoulou","Alédjo","Bodjèkali"],
+  "Tanguiéta": ["Centre","Nattitingou","Cotiakou","Matéri","Cobly"],
+  "Kérou": ["Centre","Firou","Brignamaro","Péhunco"],
+  "Zagnanado": ["Centre","Dah","Sèhouè","Ouinhi","Bonou"],
+  "Glazoué": ["Centre","Dassa-Zoumé","Ouèssè","Bantè","Save"],
+  "Savè": ["Centre","Kaboua","Bétérou","Ouèssè"],
+  "Sèmè-Kpodji": ["Centre","Agblangandan","Ekpè","Tohouè","Daagbé"],
+  "Cotonou-Est": ["Akpakpa-Nord","Akpakpa-Sud","Sèmè-Plage","Avotrou"],
+  "Cotonou-Ouest": ["Fidjrossè-Plage","Ahouansori","Sènadé"]
+};
+
+// Fonction pour remplir le select quartier selon la ville choisie
+function peuplerQuartiers(villeSelectId, quartierSelectId) {
+  const ville = document.getElementById(villeSelectId).value;
+  const quartierSelect = document.getElementById(quartierSelectId);
+  quartierSelect.innerHTML = '<option value="">-- Choisissez le quartier --</option>';
+  quartierSelect.disabled = true;
+
+  if(!ville || !VILLES_BENIN[ville]) return;
+
+  const quartiers = VILLES_BENIN[ville];
+  quartiers.sort().forEach(q => {
+    const opt = document.createElement('option');
+    opt.value = ville + ', ' + q;
+    opt.textContent = q;
+    quartierSelect.appendChild(opt);
+  });
+  quartierSelect.disabled = false;
+}
+
+// Peupler les quartiers dans le hero
+function peuplerQuartiersHero() {
+  const ville = document.getElementById('heroVille').value;
+  const quartierSelect = document.getElementById('heroQuartier');
+  quartierSelect.innerHTML = '<option value="">📍 Tous les quartiers</option>';
+  quartierSelect.disabled = !ville;
+  if(!ville || !VILLES_BENIN[ville]) return;
+  VILLES_BENIN[ville].sort().forEach(q => {
+    const opt = document.createElement('option');
+    opt.value = ville + ', ' + q;
+    opt.textContent = q;
+    quartierSelect.appendChild(opt);
+  });
+}
+
+// Filtrer par ville dans la page résultats
+function peuplerQuartiersFiltre() {
+  const ville = document.getElementById('filterVille').value;
+  const quartierSelect = document.getElementById('filterQuartier');
+  quartierSelect.innerHTML = '<option value="">📍 Tous les quartiers</option>';
+  quartierSelect.disabled = !ville;
+
+  if(!ville || !VILLES_BENIN[ville]) return;
+  const quartiers = VILLES_BENIN[ville];
+  quartiers.sort().forEach(q => {
+    const opt = document.createElement('option');
+    opt.value = ville + ', ' + q;
+    opt.textContent = q;
+    quartierSelect.appendChild(opt);
+  });
+}
+
+// ─── HERO SLIDESHOW ───────────────────────────────────────────────────────────
+(function() {
+  let current = 0;
+  function nextSlide() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if(!slides.length) return;
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }
+  // Démarre le slideshow après chargement
+  document.addEventListener('DOMContentLoaded', function() {
+    setInterval(nextSlide, 4500);
+  });
+})();
+
+function saveDB() {
+  // Sauvegarde locale (backup)
+  localStorage.setItem('artisans_db', JSON.stringify(artisans));
+}
+
+// Sauvegarde Firebase d'un artisan spécifique
+function saveArtisanFirebase(artisan) {
+  if(window._saveArtisanToFirebase) {
+    window._saveArtisanToFirebase(artisan);
+  }
+}
+
+// ─── UTILITIES ───────────────────────────────────────────────────────────────
+function metierLabel(m) {
+  const map = {electricien:'⚡ Électricien',plombier:'🚿 Plombier',macon:'🧱 Maçon',peintre:'🎨 Peintre',menuisier:'🪚 Menuisier',carreleur:'🔲 Carreleur',charpentier:'🏗️ Charpentier',soudeur:'⚙️ Soudeur',plafonneur:'🏠 Plafonneur'};
+  return map[m] || m;
+}
+
+function stars(note) {
+  if(!note) return '<span style="color:var(--gray-300)">Pas encore noté</span>';
+  let s = '';
+  for(let i=1;i<=5;i++) s += `<span style="color:${i<=Math.round(note)?'#f59e0b':'#e2e8f0'}">★</span>`;
+  return s;
+}
+
+function initials(nom) {
+  return nom.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+}
+
+function avatarDiv(a, size=80) {
+  if(a.photo && a.photo.startsWith('data:')) {
+    return `<img src="${a.photo}" alt="${a.nom}" style="width:${size}px;height:${size}px;object-fit:cover;border-radius:50%">`;
+  }
+  const colors = ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f59e0b','#ef4444','#06b6d4','#84cc16'];
+  const color = colors[a.id % colors.length];
+  return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,${color},${color}cc);display:flex;align-items:center;justify-content:center;font-size:${size/3}px;color:#fff;font-weight:700;font-family:'Sora',sans-serif">${initials(a.nom)}</div>`;
+}
+
+function cardAvatarDiv(a) {
+  if(a.photo && a.photo.startsWith('data:')) {
+    return `<img src="${a.photo}" alt="${a.nom}">`;
+  }
+  const colors = ['#3b82f6','#8b5cf6','#ec4899','#10b981','#f59e0b','#ef4444','#06b6d4','#84cc16'];
+  const color = colors[a.id % colors.length];
+  return `<div class="avatar-placeholder" style="background:linear-gradient(135deg,${color},${color}aa)">${initials(a.nom)}</div>`;
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  const icons = {success:'✅',error:'❌',info:'ℹ️'};
+  t.innerHTML = `${icons[type]||''} ${msg}`;
+  t.className = `toast show ${type}`;
+  setTimeout(()=>t.className='toast',2800);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ─── PAGES ───────────────────────────────────────────────────────────────────
+function showPage(name) {
+  // Protect admin page
+  if (name === 'admin' && !adminLoggedIn) {
+    goAdmin();
+    return;
+  }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='home') { updateStats(); renderFeatured(); updateCatCounts(); }
+  if(name==='results') { setTimeout(applyFilters,50); }
+  if(name==='admin') { renderAdmin(); }
+  closeMenu();
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+function updateStats() {
+  const active = artisans.filter(a=>a.statut!=='pending'&&a.statut!=='rejected');
+  const verified = artisans.filter(a=>a.statut==='verified'||a.statut==='premium');
+  document.getElementById('stat-total').textContent = artisans.length + '+';
+  document.getElementById('stat-verified').textContent = verified.length + '+';
+}
+
+function updateCatCounts() {
+  const cats = ['electricien','plombier','macon','peintre','menuisier','carreleur','charpentier','soudeur','plafonneur'];
+  cats.forEach(c => {
+    const count = artisans.filter(a=>a.metier===c&&(a.statut==='verified'||a.statut==='premium')).length;
+    document.querySelectorAll('.cat-count-'+c).forEach(el=>{
+      el.textContent = count + ' artisan' + (count>1?'s':'');
+    });
+  });
+}
+
+function renderFeatured() {
+  const featured = artisans.filter(a=>a.statut==='premium'||a.statut==='verified').sort((a,b)=>b.note-a.note).slice(0,6);
+  document.getElementById('featuredGrid').innerHTML = featured.map(a=>artisanCard(a)).join('');
+}
+
+function doSearch() {
+  const m = document.getElementById('heroMetier').value;
+  const heroVille = document.getElementById('heroVille') ? document.getElementById('heroVille').value : '';
+  const heroQuartier = document.getElementById('heroQuartier') ? document.getElementById('heroQuartier').value : '';
+  const z = heroQuartier || heroVille;
+  searchFilters = { metier: m, zone: z };
+  document.getElementById('filterMetier').value = m;
+  document.getElementById('filterZone').value = z;
+  showPage('results');
+}
+
+function filterByCat(cat) {
+  searchFilters = { metier: cat, zone: '' };
+  document.getElementById('filterMetier').value = cat;
+  document.getElementById('filterZone').value = '';
+  showPage('results');
+}
+
+// ─── RESULTS ──────────────────────────────────────────────────────────────────
+function applyFilters() {
+  const m = document.getElementById('filterMetier').value;
+  const filterVilleEl = document.getElementById('filterVille');
+  const filterQuartierEl = document.getElementById('filterQuartier');
+  const z = filterQuartierEl && filterQuartierEl.value ? filterQuartierEl.value.toLowerCase() :
+            filterVilleEl && filterVilleEl.value ? filterVilleEl.value.toLowerCase() : '';
+  const n = parseFloat(document.getElementById('filterNote').value) || 0;
+  const d = document.getElementById('filterDispo').value;
+  const nomEl = document.getElementById('filterNom');
+  const nom = nomEl ? nomEl.value.toLowerCase().trim() : '';
+
+  let results = artisans.filter(a=>a.statut==='verified'||a.statut==='premium');
+  if(m) results = results.filter(a=>a.metier===m);
+  if(z) results = results.filter(a=>a.zone.toLowerCase().includes(z));
+  if(n) results = results.filter(a=>a.note>=n);
+  if(d) results = results.filter(a=>a.dispo===d);
+  if(nom) results = results.filter(a=>a.nom.toLowerCase().includes(nom));
+
+  // Premium first
+  results.sort((a,b)=>{
+    if(a.statut==='premium'&&b.statut!=='premium') return -1;
+    if(b.statut==='premium'&&a.statut!=='premium') return 1;
+    return b.note-a.note;
+  });
+
+  document.getElementById('resultsCount').textContent = results.length + ' artisan' + (results.length>1?'s':'') + ' trouvé' + (results.length>1?'s':'');
+  document.getElementById('resultsGrid').innerHTML = results.map(a=>artisanCard(a)).join('');
+  document.getElementById('emptyResults').style.display = results.length ? 'none' : 'block';
+}
+
+// ─── ARTISAN CARD ─────────────────────────────────────────────────────────────
+function artisanCard(a) {
+  const badge = a.statut==='premium'
+    ? `<div class="badge-premium">⭐ Premium</div>`
+    : a.statut==='verified'
+    ? `<div class="badge-verified">✅ Vérifié</div>`
+    : a.statut==='pending'
+    ? `<div class="badge-pending">⏳ En attente</div>` : '';
+
+  const isPremium = a.statut==='premium';
+
+  return `
+  <div class="artisan-card${isPremium?' premium-card':''}" onclick="showProfile(${a.id})">
+    <div class="card-img">
+      ${cardAvatarDiv(a)}
+      ${badge}
+      ${a.dispo==='disponible'?`<div style="position:absolute;bottom:10px;right:10px;background:#10b981;color:#fff;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:50px">● Disponible</div>`:''}
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <div class="card-name">${a.nom}</div>
+        ${a.note>0?`<div class="card-rating"><span class="stars">★</span><span>${a.note} (${a.avis})</span></div>`:''}
+      </div>
+      <div class="card-job">${metierLabel(a.metier)}</div>
+      <div class="card-zone">📍 ${a.zone}</div>
+      <div class="card-actions">
+        <a class="btn btn-wa" href="https://wa.me/${a.tel.replace(/[\s+]/g,'')}" target="_blank" onclick="event.stopPropagation()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+        <a class="btn btn-call" href="tel:${a.tel}" onclick="event.stopPropagation()">📞 Appel</a>
+      </div>
+      <button class="btn btn-profile" onclick="event.stopPropagation();showProfile(${a.id})">👁️ Voir le profil</button>
+    </div>
+  </div>`;
+}
+
+// ─── PROFILE ──────────────────────────────────────────────────────────────────
+function showProfile(id) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  currentProfile = a;
+
+  const reviewsHTML = a.reviews.length
+    ? a.reviews.map(r=>`
+      <div class="review-item">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.35rem">
+          <span class="review-author">👤 ${r.auteur}</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="color:#f59e0b;font-size:0.85rem">${'★'.repeat(r.note)}${'☆'.repeat(5-r.note)}</span>
+            <span class="review-date">${r.date}</span>
+          </div>
+        </div>
+        <p class="review-text">"${r.texte}"</p>
+      </div>`).join('')
+    : `<p style="color:var(--gray-400);font-size:0.88rem">Pas encore d'avis clients.</p>`;
+
+  document.getElementById('profileContent').innerHTML = `
+    <div class="breadcrumb">
+      <div class="breadcrumb-inner">
+        <a href="#" onclick="showPage('home')">Accueil</a> ›
+        <a href="#" onclick="showPage('results')">Artisans</a> ›
+        <span>${a.nom}</span>
+      </div>
+    </div>
+
+    <div class="profile-hero">
+      <div class="profile-avatar">${avatarDiv(a,120)}</div>
+      <div class="profile-name">${a.nom}</div>
+      <div class="profile-job">${metierLabel(a.metier)}</div>
+      <div class="profile-badges">
+        ${a.statut==='premium'?'<span class="badge-premium" style="position:static">⭐ Premium</span>':''}
+        ${(a.statut==='verified'||a.statut==='premium')?'<span class="badge-verified" style="position:static">✅ Vérifié BatiPro</span>':''}
+        ${a.dispo==='disponible'?'<span style="background:#10b981;color:#fff;font-size:0.75rem;font-weight:700;padding:4px 12px;border-radius:50px">● Disponible</span>':'<span style="background:var(--gray-500);color:#fff;font-size:0.75rem;font-weight:700;padding:4px 12px;border-radius:50px">⏸ Pas disponible</span>'}
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <div class="profile-grid">
+        <div>
+          <div class="profile-card">
+            <h3>📋 À propos</h3>
+            <p style="color:var(--gray-600);font-size:0.92rem;line-height:1.7">${a.desc}</p>
+          </div>
+
+          <div class="profile-card">
+            <h3>📊 Informations</h3>
+            <div class="info-row">
+              <div class="info-icon">🔧</div>
+              <div><div class="info-label">Métier</div><div class="info-value">${metierLabel(a.metier)}</div></div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon">📍</div>
+              <div><div class="info-label">Zone d'intervention</div><div class="info-value">${a.zone}</div></div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon">⭐</div>
+              <div><div class="info-label">Note clients</div><div class="info-value">${a.note>0?`${stars(a.note)} ${a.note}/5 (${a.avis} avis)`:'Pas encore noté'}</div></div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon">🏆</div>
+              <div><div class="info-label">Expérience</div><div class="info-value">${a.exp} an${a.exp>1?'s':''} d'expérience</div></div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon">🕐</div>
+              <div><div class="info-label">Disponibilité</div><div class="info-value">${a.dispo==='disponible'?'<span style="color:var(--success);font-weight:600">✅ Disponible</span>':'<span style="color:var(--gray-400)">⏸ Pas disponible actuellement</span>'}</div></div>
+            </div>
+          </div>
+
+          <div class="profile-card">
+            <h3>⭐ Avis clients (${a.avis})</h3>
+            ${reviewsHTML}
+          </div>
+        </div>
+
+        <div>
+          <div class="profile-card contact-sidebar">
+            <h3>📞 Contacter ${a.nom.split(' ')[0]}</h3>
+            <a class="btn btn-wa btn-lg" style="width:100%;justify-content:center;margin-bottom:0.75rem;text-decoration:none" href="https://wa.me/${a.tel.replace(/[\s+]/g,'')}" target="_blank">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+            <a class="btn btn-call btn-lg" style="width:100%;justify-content:center;margin-bottom:0.75rem;text-decoration:none" href="tel:${a.tel}">
+              📞 Appeler directement
+            </a>
+            <button class="btn btn-orange btn-lg" style="width:100%;justify-content:center" onclick="openDevisModal(${a.id})">
+              📋 Demander un devis
+            </button>
+
+            <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--gray-100)">
+              <div style="font-size:0.78rem;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem">Téléphone</div>
+              <div style="font-size:1rem;color:var(--gray-700);font-weight:600">${a.tel}</div>
+            </div>
+
+            ${a.statut==='premium'?`
+            <div style="margin-top:1.25rem;background:linear-gradient(135deg,#fef3c7,#fff);border:2px solid #f59e0b;border-radius:10px;padding:1rem;text-align:center">
+              <div style="font-size:0.85rem;font-weight:700;color:#b45309">⭐ Artisan Premium</div>
+              <div style="font-size:0.78rem;color:#92400e;margin-top:0.25rem">Profil mis en avant sur la plateforme</div>
+            </div>`:''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  showPage('profile');
+}
+
+// ─── DEVIS ────────────────────────────────────────────────────────────────────
+function openDevisModal(id) {
+  currentDevisArtisan = artisans.find(a=>a.id===id);
+  document.getElementById('devisContent').innerHTML = `
+    <div class="form-group">
+      <label>Votre nom</label>
+      <input type="text" id="devisNom" placeholder="Votre nom complet"/>
+    </div>
+    <div class="form-group">
+      <label>Votre téléphone</label>
+      <input type="tel" id="devisTel" placeholder="+229 00 00 00 00"/>
+    </div>
+    <div class="form-group">
+      <label>Description des travaux</label>
+      <textarea id="devisDesc" placeholder="Décrivez vos travaux en détail..." style="min-height:100px"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Budget estimé</label>
+      <input type="text" id="devisBudget" placeholder="Ex: 50 000 FCFA"/>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="sendDevis()">
+      📤 Envoyer la demande de devis
+    </button>`;
+  openModal('devisModal');
+}
+
+function sendDevis() {
+  const nom = document.getElementById('devisNom').value.trim();
+  const tel = document.getElementById('devisTel').value.trim();
+  const desc = document.getElementById('devisDesc').value.trim();
+  if(!nom||!tel||!desc) { showToast('Veuillez remplir tous les champs obligatoires','error'); return; }
+
+  const a = currentDevisArtisan;
+  const msg = encodeURIComponent(`Bonjour ${a.nom.split(' ')[0]} ! Je souhaite un devis.\n\nNom: ${nom}\nTél: ${tel}\n\nTravaux: ${desc}`);
+  const waUrl = `https://wa.me/${a.tel.replace(/[\s+]/g,'')}?text=${msg}`;
+
+  document.getElementById('devisContent').innerHTML = `
+    <div class="devis-sent">
+      <div class="d-icon">✅</div>
+      <h3 style="color:var(--success);margin-bottom:0.5rem">Devis prêt !</h3>
+      <p style="color:var(--gray-600);margin-bottom:1.25rem">Cliquez pour envoyer votre demande directement sur WhatsApp de ${a.nom}</p>
+      <a href="${waUrl}" target="_blank" class="btn btn-wa btn-lg" style="justify-content:center;width:100%;text-decoration:none">
+        📲 Envoyer sur WhatsApp
+      </a>
+    </div>`;
+}
+
+// ─── REGISTER ─────────────────────────────────────────────────────────────────
+function previewPhoto(input) {
+  if(input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('uploadText').innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:0.5rem"><br><small>Photo sélectionnée ✅</small>`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function previewDiplome(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const icon = document.getElementById('diplomeIcon');
+  const text = document.getElementById('diplomeText');
+  const area = document.getElementById('diplomeArea');
+  if(file.type === 'application/pdf') {
+    icon.textContent = '📄';
+    text.innerHTML = '✅ <strong>' + file.name + '</strong><br><small>PDF sélectionné</small>';
+  } else {
+    const reader = new FileReader();
+    reader.onload = e => {
+      icon.innerHTML = '<img src="' + e.target.result + '" style="width:80px;height:60px;object-fit:cover;border-radius:8px">';
+      text.innerHTML = '✅ <strong>' + file.name + '</strong><br><small>Image sélectionnée</small>';
+    };
+    reader.readAsDataURL(file);
+  }
+  area.style.borderColor = '#10b981';
+  area.style.background = '#f0fdf4';
+}
+
+function validateTel(input) {
+  const val = input.value.trim();
+  const regex = /^[+]?[0-9\s\-]{8,15}$/;
+  const err = document.getElementById('telError');
+  if(val && !regex.test(val)) {
+    err.style.display = 'block';
+    input.style.borderColor = '#dc2626';
+  } else {
+    err.style.display = 'none';
+    input.style.borderColor = '';
+  }
+}
+
+async function submitRegistration() {
+  const nom = document.getElementById('regNom').value.trim();
+  const tel = document.getElementById('regTel').value.trim();
+  const whatsapp = document.getElementById('regWhatsapp').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const metier = document.getElementById('regMetier').value;
+  const regVille = document.getElementById('regVille') ? document.getElementById('regVille').value : '';
+  const regQuartier = document.getElementById('regQuartier') ? document.getElementById('regQuartier').value : '';
+  const zone = regQuartier || regVille;
+  const desc = document.getElementById('regDesc').value.trim();
+  const exp = parseInt(document.getElementById('regExp').value)||0;
+  const dispo = document.getElementById('regDispo').value;
+  const photoInput = document.getElementById('photoInput');
+  const diplomeInput = document.getElementById('diplomeInput');
+
+  // ── Validations ──────────────────────────────────────────────────────────────
+  if(!nom || !tel || !metier || !regVille || !desc) {
+    showToast('Veuillez remplir tous les champs obligatoires ⚠️','error'); return;
+  }
+  if(!diplomeInput.files || !diplomeInput.files[0]) {
+    showToast('Veuillez ajouter votre diplôme ou attestation 🎓','error');
+    document.getElementById('diplomeArea').style.borderColor = '#dc2626';
+    document.getElementById('diplomeArea').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  const telRegex = /^[+]?[0-9\s\-]{8,15}$/;
+  if(!telRegex.test(tel)) {
+    showToast('Numéro de téléphone invalide ⚠️','error');
+    document.getElementById('regTel').focus();
+    return;
+  }
+  if(email && !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    showToast('Adresse email invalide ⚠️','error');
+    document.getElementById('regEmail').focus();
+    return;
+  }
+
+  // ── Bouton loading ───────────────────────────────────────────────────────────
+  const submitBtn = document.querySelector('#registerForm .btn-primary');
+  if(submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '⏳ Envoi en cours...'; }
+
+  // ── Lire les fichiers ────────────────────────────────────────────────────────
+  const readFile = (file) => new Promise((resolve) => {
+    if(!file) return resolve('');
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.readAsDataURL(file);
+  });
+
+  const photo = await readFile(photoInput.files[0] || null);
+  const diplome = await readFile(diplomeInput.files[0]);
+  const diplomeNom = diplomeInput.files[0].name;
+
+  // ── Créer l'artisan ──────────────────────────────────────────────────────────
+  const newArtisan = {
+    id: ++nextId, nom, tel,
+    whatsapp: whatsapp || tel,
+    email: email || '',
+    metier, zone,
+    description: desc, desc, exp, dispo,
+    photo, diplome, diplomeNom,
+    statut: 'pending', note: 0, avis: 0,
+    reviews: [],
+    dateInscription: new Date().toISOString(),
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  // ── Sauvegarder : Firebase EN PREMIER, localStorage en backup ────────────────
+  artisans.push(newArtisan);
+  saveDB(); // backup local
+
+  if(window._saveArtisanToFirebase) {
+    await window._saveArtisanToFirebase(newArtisan);
+    showToast('✅ Inscription envoyée ! Vous serez contacté après validation.','success');
+  } else {
+    showToast('✅ Inscription soumise (mode local)','success');
+  }
+
+  // ── Afficher le succès ───────────────────────────────────────────────────────
+  document.getElementById('registerForm').style.display='none';
+  document.getElementById('registerSuccess').style.display='block';
+
+  if(submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '📤 Soumettre mon inscription'; }
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+function renderAdmin() {
+  updateAdminStats();
+  renderPendingCards('');
+  renderAdminTable('all');
+  renderAdminTable('verified');
+  renderAdminTable('rejected');
+  renderRecentTable();
+  const p = artisans.filter(a=>a.statut==='pending').length;
+  document.getElementById('pendingCount').textContent = p||'';
+}
+
+function renderPendingCards(query) {
+  query = query || '';
+  const q = query.toLowerCase();
+  const pending = artisans.filter(a => {
+    if(a.statut !== 'pending') return false;
+    if(!q) return true;
+    return a.nom.toLowerCase().includes(q) || a.zone.toLowerCase().includes(q) || a.metier.toLowerCase().includes(q);
+  });
+
+  const container = document.getElementById('pendingCards');
+  if(!container) return;
+
+  if(pending.length === 0) {
+    container.innerHTML = '<div class="empty-validation"><div class="ev-icon">🎉</div><p><strong>Aucune inscription en attente</strong><br>Tous les artisans ont été traités !</p></div>';
+    return;
+  }
+
+  const metiersIcons = {'Electricite':'⚡','Plomberie':'🔧','Maconnerie':'🧱','Peinture':'🎨','Menuiserie':'🪚','Carrelage':'⬛','Charpenterie':'🏗️','Soudure':'🔩','Platrerie':'🏠'};
+
+  let cards = pending.map(a => {
+    const icon = metiersIcons[a.metier] || '🔨';
+    const dateStr = a.dateInscription ? new Date(a.dateInscription).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : 'Date inconnue';
+    return '<div class="validation-card" id="vc-' + a.id + '">' +
+      '<div class="vc-header">' +
+        '<div class="vc-avatar">' + icon + '</div>' +
+        '<div><div class="vc-name">' + a.nom + '</div><div class="vc-metier">' + a.metier + '</div></div>' +
+      '</div>' +
+      '<div class="vc-body">' +
+        '<div class="vc-info">' +
+          '<div class="vc-row"><strong>📍 Zone</strong> ' + a.zone + '</div>' +
+          '<div class="vc-row"><strong>📞 Tel</strong> ' + a.tel + '</div>' +
+          (a.email ? '<div class="vc-row"><strong>📧 Email</strong> ' + a.email + '</div>' : '') +
+          '<div class="vc-row"><strong>💼 Exp.</strong> ' + a.exp + ' an' + (a.exp>1?'s':'') + " d'exp.</div>" +
+          (a.whatsapp ? '<div class="vc-row"><strong>💬 WA</strong> ' + a.whatsapp + '</div>' : '') +
+        '</div>' +
+        '<div class="vc-date">📅 Inscrit le ' + dateStr + '</div>' +
+        '<div class="vc-actions">' +
+          '<button class="vc-btn-accept" onclick="accepterArtisan(' + a.id + ')">✅ Accepter</button>' +
+          '<button class="vc-btn-reject" onclick="refuserArtisan(' + a.id + ')">❌ Refuser</button>' +
+          '<button class="vc-btn-detail" onclick="voirDetailArtisan(' + a.id + ')" title="Voir fiche">👁️</button>' +
+        '</div>' +
+      '</div></div>';
+  }).join('');
+
+  container.innerHTML = '<div class="validation-grid">' + cards + '</div>';
+}
+
+function accepterArtisan(id) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  if(!confirm('Valider l\'inscription de ' + a.nom + ' ?')) return;
+  a.statut = 'verified';
+  saveDB();
+  saveArtisanFirebase(a);
+  renderAdmin();
+  showToast('✅ ' + a.nom + ' est maintenant validé !', 'success');
+}
+
+function refuserArtisan(id) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  if(!confirm('Refuser l\'inscription de ' + a.nom + ' ?')) return;
+  a.statut = 'rejected';
+  saveDB();
+  saveArtisanFirebase(a);
+  renderAdmin();
+  showToast('❌ Inscription de ' + a.nom + ' refusée', 'error');
+}
+
+function voirDetailArtisan(id) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  const dateStr = a.dateInscription ? new Date(a.dateInscription).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}) : 'Inconnue';
+  const statusHtml = (a.statut==='pending') ?
+    '<div class="detail-actions"><button class="vc-btn-accept" style="flex:1" onclick="accepterArtisan(' + a.id + ');closeModal(\'detailModal\')">✅ Accepter</button><button class="vc-btn-reject" style="flex:1" onclick="refuserArtisan(' + a.id + ');closeModal(\'detailModal\')">❌ Refuser</button></div>' :
+    '<div style="text-align:center;padding:0.5rem;font-weight:700;color:' + ((a.statut==='verified'||a.statut==='premium')?'#10b981':'#dc2626') + '">' + ((a.statut==='verified'||a.statut==='premium')?'✅ Artisan validé':'❌ Artisan refusé') + '</div>';
+  document.getElementById('detailModalContent').innerHTML =
+    '<div class="detail-grid">' +
+      '<div class="detail-item"><label>Nom complet</label><p>' + a.nom + '</p></div>' +
+      '<div class="detail-item"><label>Métier</label><p>' + a.metier + '</p></div>' +
+      '<div class="detail-item"><label>Téléphone</label><p>' + a.tel + '</p></div>' +
+      '<div class="detail-item"><label>Email</label><p>' + (a.email || 'Non renseigné') + '</p></div>' +
+      '<div class="detail-item"><label>WhatsApp</label><p>' + (a.whatsapp||'Non renseigné') + '</p></div>' +
+      '<div class="detail-item"><label>Zone / Ville</label><p>' + a.zone + '</p></div>' +
+      '<div class="detail-item"><label>Expérience</label><p>' + a.exp + ' an' + (a.exp>1?'s':'') + '</p></div>' +
+      '<div class="detail-item" style="grid-column:1/-1"><label>🎓 Diplôme / Attestation</label>' +
+        (a.diplome ?
+          (a.diplome.startsWith('data:application/pdf') ?
+            '<p>📄 ' + (a.diplomeNom||'Document PDF') + ' — <a href="' + a.diplome + '" download="' + (a.diplomeNom||'diplome.pdf') + '" style="color:#2563eb;font-weight:700">⬇️ Télécharger</a></p>' :
+            '<div style="margin-top:6px"><img src="' + a.diplome + '" style="max-width:100%;max-height:200px;border-radius:8px;border:1px solid #e5e7eb" alt="Diplôme"><br><a href="' + a.diplome + '" download="' + (a.diplomeNom||'diplome.jpg') + '" style="color:#2563eb;font-size:0.8rem;font-weight:700">⬇️ Télécharger</a></div>'
+          ) :
+          '<p style="color:#dc2626">❌ Aucun diplôme fourni</p>'
+        ) +
+      '</div>' +
+      '<div class="detail-item" style="grid-column:1/-1"><label>Date inscription</label><p>' + dateStr + '</p></div>' +
+      (a.description ? '<div class="detail-item" style="grid-column:1/-1"><label>Description</label><p style="font-weight:400;font-size:0.85rem">' + a.description + '</p></div>' : '') +
+    '</div>' + statusHtml;
+  openModal('detailModal');
+}
+
+function updateAdminStats() {
+  const all = artisans.length;
+  const verified = artisans.filter(a=>a.statut==='verified').length;
+  const premium = artisans.filter(a=>a.statut==='premium').length;
+  const pending = artisans.filter(a=>a.statut==='pending').length;
+  const rejected = artisans.filter(a=>a.statut==='rejected').length;
+
+  document.getElementById('adminStats').innerHTML = `
+    <div class="stat-card"><div class="s-icon">👥</div><div class="s-val">${all}</div><div class="s-lbl">Total artisans</div></div>
+    <div class="stat-card"><div class="s-icon">✅</div><div class="s-val">${verified}</div><div class="s-lbl">Vérifiés</div></div>
+    <div class="stat-card"><div class="s-icon">⭐</div><div class="s-val">${premium}</div><div class="s-lbl">Premium</div></div>
+    <div class="stat-card"><div class="s-icon">⏳</div><div class="s-val">${pending}</div><div class="s-lbl">En attente</div></div>
+    <div class="stat-card"><div class="s-icon">❌</div><div class="s-val">${rejected}</div><div class="s-lbl">Refusés</div></div>
+    <div class="stat-card"><div class="s-icon">📊</div><div class="s-val">${(artisans.filter(a=>a.note>0).reduce((s,a)=>s+a.note,0)/Math.max(1,artisans.filter(a=>a.note>0).length)).toFixed(1)}</div><div class="s-lbl">Note moyenne</div></div>
+  `;
+}
+
+function renderRecentTable() {
+  const recent = [...artisans].sort((a,b)=>b.id-a.id).slice(0,5);
+  document.getElementById('recentTable').innerHTML = tableHTML(recent, true);
+}
+
+function adminSearch(q, section) {
+  const filtered = artisans.filter(a=>{
+    const matchSection = section==='pending'?a.statut==='pending':section==='all'?true:a.statut===section;
+    const matchQ = !q || a.nom.toLowerCase().includes(q.toLowerCase()) || a.zone.toLowerCase().includes(q.toLowerCase()) || a.metier.includes(q.toLowerCase());
+    return matchSection && matchQ;
+  });
+  const tableId = section==='pending'?'pendingTable':section==='all'?'allTable':section+'Table';
+  document.getElementById(tableId).innerHTML = tableHTML(filtered, true);
+}
+
+function renderAdminTable(section) {
+  let data = [...artisans];
+  if(section==='pending') data = data.filter(a=>a.statut==='pending');
+  else if(section==='verified') data = data.filter(a=>a.statut==='verified'||a.statut==='premium');
+  else if(section==='rejected') data = data.filter(a=>a.statut==='rejected');
+
+  const el = document.getElementById(section==='pending'?'pendingTable':section==='all'?'allTable':section+'Table');
+  if(el) el.innerHTML = tableHTML(data, true);
+}
+
+function tableHTML(data, admin=false) {
+  if(!data.length) return `<div class="empty-state"><div class="e-icon">📭</div><h3>Aucun artisan</h3></div>`;
+  return `<table>
+    <thead>
+      <tr>
+        <th>Artisan</th>
+        <th>Métier</th>
+        <th>Zone</th>
+        <th>Tel</th>
+        <th>Statut</th>
+        <th>Date</th>
+        ${admin?'<th>Actions</th>':''}
+      </tr>
+    </thead>
+    <tbody>
+      ${data.map(a=>`
+      <tr>
+        <td><strong>${a.nom}</strong></td>
+        <td>${metierLabel(a.metier)}</td>
+        <td>${a.zone}</td>
+        <td>${a.tel}</td>
+        <td><span class="status-badge status-${a.statut==='premium'?'premium':a.statut}">${
+          a.statut==='verified'?'✅ Vérifié':
+          a.statut==='premium'?'⭐ Premium':
+          a.statut==='pending'?'⏳ En attente':
+          '❌ Refusé'
+        }</span></td>
+        <td>${a.date||'-'}</td>
+        ${admin?`<td><div class="actions-cell">
+          ${a.statut==='pending'?`
+            <button class="btn btn-success btn-sm" onclick="updateStatus(${a.id},'verified')">✅ Valider</button>
+            <button class="btn btn-danger btn-sm" onclick="updateStatus(${a.id},'rejected')">❌ Refuser</button>
+          `:''}
+          ${(a.statut==='verified'||a.statut==='rejected')?`<button class="btn btn-sm" style="background:var(--warning);color:#fff" onclick="updateStatus(${a.id},'premium')">⭐ Premium</button>`:''}
+          <button class="btn btn-sm" style="background:var(--blue-pale);color:var(--blue)" onclick="editArtisan(${a.id})">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteArtisan(${a.id})">🗑️</button>
+        </div></td>`:''}
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function updateStatus(id, newStatus) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  a.statut = newStatus;
+  saveDB();
+  renderAdmin();
+  showToast(`Statut mis à jour : ${newStatus}`,'success');
+}
+
+function deleteArtisan(id) {
+  if(!confirm('Supprimer définitivement cet artisan ?')) return;
+  artisans = artisans.filter(a=>a.id!==id);
+  saveDB();
+  renderAdmin();
+  showToast('Artisan supprimé','info');
+}
+
+function editArtisan(id) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  document.getElementById('editModalContent').innerHTML = `
+    <div class="form-group"><label>Nom complet</label><input type="text" id="edit_nom" value="${a.nom}"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Téléphone</label><input type="tel" id="edit_tel" value="${a.tel}"/></div>
+      <div class="form-group"><label>Expérience (ans)</label><input type="number" id="edit_exp" value="${a.exp}" min="0" max="50"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Métier</label>
+        <select id="edit_metier">
+          <option value="electricien" ${a.metier==='electricien'?'selected':''}>⚡ Électricien</option>
+          <option value="plombier" ${a.metier==='plombier'?'selected':''}>🚿 Plombier</option>
+          <option value="macon" ${a.metier==='macon'?'selected':''}>🧱 Maçon</option>
+          <option value="peintre" ${a.metier==='peintre'?'selected':''}>🎨 Peintre</option>
+          <option value="menuisier" ${a.metier==='menuisier'?'selected':''}>🪚 Menuisier</option>
+          <option value="carreleur" ${a.metier==='carreleur'?'selected':''}>🔲 Carreleur</option>
+          <option value="charpentier" ${a.metier==='charpentier'?'selected':''}>🏗️ Charpentier</option>
+          <option value="soudeur" ${a.metier==='soudeur'?'selected':''}>⚙️ Soudeur</option>
+          <option value="plafonneur" ${a.metier==='plafonneur'?'selected':''}>🏠 Plafonneur</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Statut</label>
+        <select id="edit_statut">
+          <option value="pending" ${a.statut==='pending'?'selected':''}>⏳ En attente</option>
+          <option value="verified" ${a.statut==='verified'?'selected':''}>✅ Vérifié</option>
+          <option value="premium" ${a.statut==='premium'?'selected':''}>⭐ Premium</option>
+          <option value="rejected" ${a.statut==='rejected'?'selected':''}>❌ Refusé</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Zone</label><input type="text" id="edit_zone" value="${a.zone}"/></div>
+    <div class="form-group"><label>Description</label><textarea id="edit_desc">${a.desc}</textarea></div>
+    <div class="form-group">
+      <label>Disponibilité</label>
+      <select id="edit_dispo">
+        <option value="disponible" ${a.dispo==='disponible'?'selected':''}>✅ Disponible</option>
+        <option value="indisponible" ${a.dispo==='indisponible'?'selected':''}>⏸ Indisponible</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="saveEdit(${a.id})">💾 Enregistrer</button>`;
+  openModal('editModal');
+}
+
+function saveEdit(id) {
+  const a = artisans.find(x=>x.id===id);
+  if(!a) return;
+  a.nom = document.getElementById('edit_nom').value.trim() || a.nom;
+  a.tel = document.getElementById('edit_tel').value.trim() || a.tel;
+  a.metier = document.getElementById('edit_metier').value;
+  a.statut = document.getElementById('edit_statut').value;
+  a.zone = document.getElementById('edit_zone').value.trim() || a.zone;
+  a.desc = document.getElementById('edit_desc').value.trim() || a.desc;
+  a.exp = parseInt(document.getElementById('edit_exp').value)||a.exp;
+  a.dispo = document.getElementById('edit_dispo').value;
+  saveDB();
+  closeModal('editModal');
+  renderAdmin();
+  showToast('Profil mis à jour ✅','success');
+}
+
+function showAdminSection(name, el) {
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  document.querySelectorAll('.s-nav a').forEach(a=>a.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const titles = {dashboard:'📊 Dashboard',pending:'⏳ En attente de validation',all:'👥 Tous les artisans',verified:'✅ Artisans vérifiés',rejected:'❌ Artisans refusés'};
+  document.getElementById('adminTitle').textContent = titles[name]||'Admin';
+}
+
+// ─── ADMIN LOGIN ──────────────────────────────────────────────────────────────
+// ─── SÉCURITÉ : Mots de passe hashés SHA-256 (jamais en clair) ──────────────
+// Les mots de passe ne sont JAMAIS stockés en clair dans le code
+const ADMIN_CREDENTIALS = [
+  {
+    userHash: '8c2b6b9dc901b4b2542ddf1dd317f96a4fdd43ef448dd6a51093673168ade587',
+    pwdHash:  'ba1f85cdfbf4537a401c1546e6154569f2b3cd389971e52266cc19511192c18e',
+    role: 'Propriétaire'
+  }
+];
+
+// Fonction de hash SHA-256
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+const MAX_ATTEMPTS = 3; // Réduit à 3 tentatives max
+const LOCK_DURATION = 15 * 60 * 1000; // Bloqué 15 minutes (au lieu de 5)
+let loginAttempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
+let lockUntil = parseInt(sessionStorage.getItem('lockUntil') || '0');
+let lockInterval = null;
+let adminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+
+// Token de session unique (expire quand le navigateur ferme)
+const SESSION_TOKEN = '5fb54ab82b577abb4762c5a30ee3b45c0de069edb93fb7dfc8973db75106c9d1';
+
+function goAdmin() {
+  closeMenu();
+  if (adminLoggedIn) {
+    showPage('admin');
+    return;
+  }
+  document.getElementById('loginOverlay').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPwd').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginAttempts').classList.remove('show');
+  document.getElementById('loginLocked').classList.remove('show');
+  document.getElementById('loginBtn').disabled = false;
+  checkLockStatus();
+  setTimeout(() => document.getElementById('loginUser').focus(), 100);
+}
+
+function closLoginOverlay() {
+  document.getElementById('loginOverlay').style.display = 'none';
+}
+
+function togglePwd() {
+  const input = document.getElementById('loginPwd');
+  const btn = document.getElementById('pwdToggleBtn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+function checkLockStatus() {
+  const now = Date.now();
+  if (lockUntil > now) {
+    showLocked(lockUntil - now);
+    return true;
+  }
+  return false;
+}
+
+function showLocked(remaining) {
+  document.getElementById('loginBtn').disabled = true;
+  document.getElementById('loginLocked').classList.add('show');
+  document.getElementById('loginAttempts').classList.remove('show');
+  document.getElementById('loginError').classList.remove('show');
+
+  if (lockInterval) clearInterval(lockInterval);
+  lockInterval = setInterval(() => {
+    remaining -= 1000;
+    if (remaining <= 0) {
+      clearInterval(lockInterval);
+      loginAttempts = 0;
+      sessionStorage.setItem('loginAttempts', '0');
+      sessionStorage.setItem('lockUntil', '0');
+      lockUntil = 0;
+      document.getElementById('loginLocked').classList.remove('show');
+      document.getElementById('loginBtn').disabled = false;
+      document.getElementById('lockTimer').textContent = '0:00';
+      return;
+    }
+    const m = Math.floor(remaining / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    document.getElementById('lockTimer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+
+  const m = Math.floor(remaining / 60000);
+  const s = Math.floor((remaining % 60000) / 1000);
+  document.getElementById('lockTimer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+async function doLogin() {
+  if (checkLockStatus()) return;
+
+  const user = document.getElementById('loginUser').value.trim();
+  const pwd = document.getElementById('loginPwd').value;
+
+  if(!user || !pwd) {
+    document.getElementById('loginError').classList.add('show');
+    return;
+  }
+
+  // Délai anti-bruteforce (300ms minimum par tentative)
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = '🔄 Vérification...';
+
+  await new Promise(r => setTimeout(r, 600));
+
+  // Comparer avec les hashes SHA-256
+  const userHash = await sha256(user.toLowerCase());
+  const pwdHash = await sha256(pwd);
+
+  const valid = ADMIN_CREDENTIALS.find(c => c.userHash === userHash && c.pwdHash === pwdHash);
+
+  btn.disabled = false;
+  btn.innerHTML = '🔐 Connexion';
+
+  if (valid) {
+    // Succès - nettoyer les tentatives
+    loginAttempts = 0;
+    sessionStorage.setItem('loginAttempts', '0');
+    sessionStorage.setItem('lockUntil', '0');
+    lockUntil = 0;
+    adminLoggedIn = true;
+    sessionStorage.setItem('adminLoggedIn', 'true');
+    // Token de session
+    sessionStorage.setItem('sessionToken', SESSION_TOKEN);
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPwd').value = '';
+    showPage('admin');
+    showToast('Bienvenue Hugues ! 👋', 'success');
+  } else {
+    // Échec
+    loginAttempts++;
+    sessionStorage.setItem('loginAttempts', loginAttempts.toString());
+    document.getElementById('loginError').classList.add('show');
+
+    const restants = MAX_ATTEMPTS - loginAttempts;
+
+    if (loginAttempts >= MAX_ATTEMPTS) {
+      lockUntil = Date.now() + LOCK_DURATION;
+      sessionStorage.setItem('lockUntil', lockUntil.toString());
+      showLocked(LOCK_DURATION);
+    } else {
+      const attemptsEl = document.getElementById('loginAttempts');
+      attemptsEl.textContent = '⚠️ ' + restants + ' tentative' + (restants > 1 ? 's' : '') + ' restante' + (restants > 1 ? 's' : '') + ' avant blocage de 15 minutes';
+      attemptsEl.classList.add('show');
+      const box = document.querySelector('.login-box');
+      box.style.animation = 'none';
+      setTimeout(() => box.style.animation = 'shake 0.4s ease', 10);
+    }
+
+    document.getElementById('loginPwd').value = '';
+    document.getElementById('loginPwd').focus();
+  }
+}
+
+function adminLogout() {
+  adminLoggedIn = false;
+  sessionStorage.removeItem('adminLoggedIn');
+  showPage('home');
+  showToast('Déconnexion réussie', 'info');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  updateStats();
+  renderFeatured();
+  updateCatCounts();
+
+  // Apply URL-like filters if any
+  if(searchFilters.metier || searchFilters.zone) {
+    document.getElementById('filterMetier').value = searchFilters.metier;
+    document.getElementById('filterZone').value = searchFilters.zone;
+  }
+});
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
+});
+</script>
+
+<!-- MODAL: À propos -->
+<div class="modal-overlay" id="aproposModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header">
+      <h3>ℹ️ À propos d'BatiPro by Hugues</h3>
+      <button class="modal-close" onclick="closeModal('aproposModal')">✕</button>
+    </div>
+    <div style="color:var(--gray-700);font-size:0.92rem;line-height:1.8">
+      <p style="margin-bottom:1rem"><strong>BatiPro by Hugues</strong> est la marketplace locale des artisans du bâtiment au Bénin. Notre mission : connecter rapidement les particuliers et entreprises avec des artisans qualifiés, vérifiés et disponibles près de chez eux.</p>
+      <p style="margin-bottom:1rem">Fondée avec la volonté de <strong>valoriser le savoir-faire local</strong>, notre plateforme couvre tous les corps de métier du BTP : électricité, plomberie, maçonnerie, peinture, menuiserie, carrelage, charpenterie, soudure et plâtrerie.</p>
+      <p style="margin-bottom:1rem"><strong>Notre engagement :</strong></p>
+      <ul style="padding-left:1.25rem;margin-bottom:1rem">
+        <li>✅ Chaque artisan est validé manuellement avant publication</li>
+        <li>⭐ Les avis sont authentiques et vérifiés</li>
+        <li>📞 Contact direct sans intermédiaire</li>
+        <li>🏠 Artisans locaux, réponse rapide</li>
+      </ul>
+      <p style="color:var(--gray-500);font-size:0.82rem">© 2025 BatiPro by Hugues. Tous droits réservés.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Conditions d'utilisation -->
+<div class="modal-overlay" id="conditionsModal">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <h3>📋 Conditions d'utilisation</h3>
+      <button class="modal-close" onclick="closeModal('conditionsModal')">✕</button>
+    </div>
+    <div style="color:var(--gray-700);font-size:0.88rem;line-height:1.8;max-height:60vh;overflow-y:auto">
+      <p style="margin-bottom:0.75rem"><strong>1. Objet</strong><br>BatiPro by Hugues met en relation des particuliers et des artisans du bâtiment au Bénin. La plateforme ne se substitue pas aux parties dans leur relation contractuelle.</p>
+      <p style="margin-bottom:0.75rem"><strong>2. Inscription des artisans</strong><br>Tout artisan souhaitant figurer sur la plateforme doit soumettre un profil complet. BatiPro by Hugues se réserve le droit d'accepter ou refuser toute inscription sans justification.</p>
+      <p style="margin-bottom:0.75rem"><strong>3. Responsabilité</strong><br>BatiPro by Hugues n'est pas responsable des travaux réalisés, des devis ou des accords conclus entre les utilisateurs et les artisans. Nous recommandons de demander plusieurs devis avant tout engagement.</p>
+      <p style="margin-bottom:0.75rem"><strong>4. Données personnelles</strong><br>Les informations collectées (nom, téléphone, email) sont utilisées uniquement pour la gestion des profils et la mise en relation. Elles ne sont pas partagées avec des tiers.</p>
+      <p style="margin-bottom:0.75rem"><strong>5. Propriété intellectuelle</strong><br>Le contenu de la plateforme (logos, textes, design) est la propriété exclusive d'BatiPro by Hugues. Toute reproduction est interdite sans autorisation.</p>
+      <p style="margin-bottom:0.75rem"><strong>6. Modification des CGU</strong><br>BatiPro by Hugues se réserve le droit de modifier ces conditions à tout moment. L'utilisation continue de la plateforme vaut acceptation des nouvelles conditions.</p>
+      <p style="color:var(--gray-500);font-size:0.8rem">Dernière mise à jour : Avril 2025</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Politique de confidentialité -->
+<div class="modal-overlay" id="confidentialiteModal">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <h3>🔒 Politique de confidentialité</h3>
+      <button class="modal-close" onclick="closeModal('confidentialiteModal')">✕</button>
+    </div>
+    <div style="color:var(--gray-700);font-size:0.88rem;line-height:1.8;max-height:60vh;overflow-y:auto">
+      <p style="margin-bottom:0.75rem"><strong>1. Données collectées</strong><br>Nous collectons : nom, téléphone, WhatsApp, email, métier, zone géographique et photo de profil pour les artisans inscrits.</p>
+      <p style="margin-bottom:0.75rem"><strong>2. Utilisation</strong><br>Ces données servent uniquement à afficher le profil de l'artisan sur la plateforme et permettre aux clients de les contacter directement.</p>
+      <p style="margin-bottom:0.75rem"><strong>3. Conservation</strong><br>Les données sont conservées tant que le profil est actif sur la plateforme. Sur demande, elles peuvent être supprimées en contactant l'administration.</p>
+      <p style="margin-bottom:0.75rem"><strong>4. Cookies</strong><br>Le site utilise le stockage local du navigateur (localStorage) pour sauvegarder les données des artisans. Aucun cookie publicitaire n'est utilisé.</p>
+      <p style="margin-bottom:0.75rem"><strong>5. Droits</strong><br>Vous pouvez demander la modification ou suppression de vos données en contactant l'équipe BatiPro by Hugues via WhatsApp.</p>
+      <p style="color:var(--gray-500);font-size:0.8rem">Dernière mise à jour : Avril 2025</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── PROTECTION BASIQUE ANTI-INSPECTION ──────────────────────────────────────
+// Désactiver le clic droit sur la page admin uniquement
+document.addEventListener('contextmenu', function(e) {
+  if(adminLoggedIn) {
+    e.preventDefault();
+    showToast('⚠️ Action non autorisée', 'error');
+  }
+});
+
+// Détecter l'ouverture des DevTools
+let devToolsOpen = false;
+setInterval(function() {
+  const threshold = 160;
+  if(window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+    if(!devToolsOpen && adminLoggedIn) {
+      devToolsOpen = true;
+      showToast('⚠️ Outils de développement détectés', 'error');
+    }
+  } else {
+    devToolsOpen = false;
+  }
+}, 1000);
+
+// Bloquer certaines touches clavier sur le panel admin
+document.addEventListener('keydown', function(e) {
+  if(adminLoggedIn) {
+    // Bloquer F12, Ctrl+Shift+I, Ctrl+U (voir source)
+    if(e.key === 'F12' || 
+       (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+       (e.ctrlKey && e.key === 'u')) {
+      e.preventDefault();
+      showToast('⚠️ Action non autorisée', 'error');
+    }
+  }
+});
+
+// Auto-déconnexion après 30 minutes d'inactivité
+let inactivityTimer;
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimer);
+  if(adminLoggedIn) {
+    inactivityTimer = setTimeout(function() {
+      adminLogout();
+      showToast('🔒 Déconnexion automatique après 30 min', 'error');
+    }, 30 * 60 * 1000);
+  }
+}
+document.addEventListener('mousemove', resetInactivityTimer);
+document.addEventListener('keypress', resetInactivityTimer);
+document.addEventListener('click', resetInactivityTimer);
+resetInactivityTimer();
+</script>
+</body>
+</html>
